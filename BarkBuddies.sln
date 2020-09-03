@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30413.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarkBuddies", "BarkBuddies.csproj", "{714DCD2B-8C0A-4F0A-8479-F83650BB5263}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{714DCD2B-8C0A-4F0A-8479-F83650BB5263}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{714DCD2B-8C0A-4F0A-8479-F83650BB5263}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{714DCD2B-8C0A-4F0A-8479-F83650BB5263}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{714DCD2B-8C0A-4F0A-8479-F83650BB5263}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0EB51AF0-27CE-42EC-98E9-74557064C863}
+	EndGlobalSection
+EndGlobal
