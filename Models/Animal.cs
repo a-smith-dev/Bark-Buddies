@@ -29,7 +29,7 @@ public class Animal
 //    //public Environment Environment { get; set; }
 //    [NotMapped]
 //    //public string[] Tags { get; set; }
-       
+
 //    //public string Description { get; set; }
 //    //public Photo[] Photos { get; set; }
 //    //public Video[] Videos { get; set; }

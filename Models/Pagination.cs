@@ -2,7 +2,7 @@
 
 public class Pagination
 {
-    
+
     //[JsonPropertyName("count_per_page")]
     //public int CountPerPage { get; set; }
 

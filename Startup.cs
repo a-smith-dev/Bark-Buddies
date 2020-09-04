@@ -2,15 +2,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BarkBuddies.Data;
-using BarkBuddies.Services;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
+using BarkBuddies.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using BarkBuddies.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Net.Http;
+using Newtonsoft.Json;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Net.Http.Headers;
 
 namespace BarkBuddies
 {
@@ -26,16 +34,28 @@ namespace BarkBuddies
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMemoryCache();
+
+            services.AddAuthentication();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(o =>
+            {
+                o.Authority = "https://api.petfinder.com/v2/";
+            });
+
+            services.AddDbContext<AnimalContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("OurDatabase")));
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<AnimalContext>();
+            
             services.AddHttpClient<IAnimalsService, ApiAnimalsService>(o =>
             {
                 o.BaseAddress = new Uri(Configuration["Api:BaseAddress"]);
                 o.DefaultRequestHeaders.Add("api-key", Configuration["Api:AccessKey"]);
             });
-        
-                services.AddDbContext<AnimalContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("OurDatabase")));
             
             services.AddControllersWithViews();
+            services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,6 +64,7 @@ namespace BarkBuddies
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
             }
             else
             {
@@ -58,11 +79,13 @@ namespace BarkBuddies
 
             app.UseAuthorization();
 
+            app.UseAuthentication();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
             });
         }
     }
