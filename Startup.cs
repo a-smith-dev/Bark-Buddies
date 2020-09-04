@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BarkBuddies.Data;
 using BarkBuddies.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -29,6 +31,10 @@ namespace BarkBuddies
                 o.BaseAddress = new Uri(Configuration["Api:BaseAddress"]);
                 o.DefaultRequestHeaders.Add("api-key", Configuration["Api:AccessKey"]);
             });
+        
+                services.AddDbContext<AnimalContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("OurDatabase")));
+            
             services.AddControllersWithViews();
         }
 
