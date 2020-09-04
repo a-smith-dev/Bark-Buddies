@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace BarkBuddies.Models
+
 {
     public class ApiResponse
     {
@@ -44,13 +46,13 @@ public class Colors
 }
 
 public class Attributes
-{ 
+{
     [JsonPropertyName("spayed_neutered")]
     public bool SpayedNeutered { get; set; }
 
     [JsonPropertyName("house_trained")]
     public bool HouseTrained { get; set; }
-
+    [NotMapped]
     public object Declawed { get; set; }
 
     [JsonPropertyName("special_needs")]
