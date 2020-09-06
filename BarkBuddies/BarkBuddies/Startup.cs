@@ -19,6 +19,7 @@ using Newtonsoft.Json;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Net.Http.Headers;
+using BarkBuddies.Models;
 
 namespace BarkBuddies
 {
@@ -51,8 +52,9 @@ namespace BarkBuddies
             services.AddHttpClient<IAnimalsService, ApiAnimalsService>(o =>
             {
                 o.BaseAddress = new Uri(Configuration["Api:BaseAddress"]);
-                o.DefaultRequestHeaders.Add("api-key", Configuration["Api:AccessKey"]);
             });
+
+            services.Configure<PetFinderApiCredentials>(Configuration.GetSection("PetFinderApiCredentials"));
             
             services.AddControllersWithViews();
             services.AddRazorPages();

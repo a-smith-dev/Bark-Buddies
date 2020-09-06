@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using BarkBuddies.Models;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -15,12 +17,14 @@ namespace BarkBuddies.Services
     {
         private readonly HttpClient _client;
         private readonly IMemoryCache _cache;
+        private readonly PetFinderApiCredentials _petfinderDetails;
         private const string CacheKey = "TokenCacheKey";
 
-        public ApiAnimalsService(HttpClient client, IMemoryCache cache)
+        public ApiAnimalsService(HttpClient client, IMemoryCache cache, IOptions<PetFinderApiCredentials> petfinderDetails)
         {
             _client = client;
             _cache = cache;
+            _petfinderDetails = petfinderDetails.Value;
         }
 
         public async Task<Animal> Get()
@@ -31,8 +35,8 @@ namespace BarkBuddies.Services
                 var content = new StringContent(JsonConvert.SerializeObject(
                    new
                    {
-                       client_id = "",
-                       client_secret = "",
+                       client_id = _petfinderDetails.ApiKey,
+                       client_secret = _petfinderDetails.ApiSecret,
                        grant_type = "client_credentials"
                    }), Encoding.UTF8, "application/json");
 
