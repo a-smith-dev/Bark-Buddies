@@ -28,9 +28,9 @@ namespace BarkBuddies.Services
             _petfinderDetails = petfinderDetails.Value;
         }
 
-        public async Task<Animal> Get()
+        public async Task<ApiResponse> Get()
         {
-            var token = await _cache.GetOrCreateAsync(CacheKey, async entry =>
+            string token = await _cache.GetOrCreateAsync(CacheKey, async entry =>
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30);
                 var content = new StringContent(JsonConvert.SerializeObject(
@@ -43,11 +43,14 @@ namespace BarkBuddies.Services
 
                 var response = await _client.PostAsync("oauth2/token", content);
                 return await response.Content.ReadAsStringAsync();
+               
             });
-
+            token = token.Replace("\"", "");
+            token = token.Replace("token_type:Bearer,expires_in:3600,access_token:", "");
+            token = token.Replace("{", string.Empty).Replace("}", string.Empty);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            return await _client.GetFromJsonAsync<Animal>($"https://api.petfinder.com/v2/");
+            return await _client.GetFromJsonAsync<ApiResponse>($"animals");
         }
         public Task<IActionResult> Create(Animal animal)
         {
