@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using BarkBuddies.Models;
+using BarkBuddies.Services;
 
 namespace BarkBuddies.Controllers
 {
@@ -13,9 +14,12 @@ namespace BarkBuddies.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IAnimalsService _service;
+
+        public HomeController(ILogger<HomeController> logger, IAnimalsService service)
         {
             _logger = logger;
+            _service = service;
         }
 
         public IActionResult Index()
@@ -27,11 +31,35 @@ namespace BarkBuddies.Controllers
         {
             return View();
         }
+        public IActionResult Test()
+        {
+           var test = _service.Get();
+            return View();
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+      
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create([Bind("")] Animal animal)
+        {
+            if (ModelState.IsValid)
+            {
+                await _service.Create(animal);
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View();
         }
     }
 }

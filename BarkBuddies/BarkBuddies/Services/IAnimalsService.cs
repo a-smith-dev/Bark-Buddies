@@ -1,12 +1,15 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace BarkBuddies.Services
 {
-    interface IAnimalsService
+   public interface IAnimalsService
     {
         Task<Animal> Get();
+        Task<IActionResult> Create(Animal animal);
+
     }
 }

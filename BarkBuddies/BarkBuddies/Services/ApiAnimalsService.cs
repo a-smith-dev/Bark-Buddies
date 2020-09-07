@@ -1,4 +1,5 @@
 ﻿using BarkBuddies.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -46,7 +47,12 @@ namespace BarkBuddies.Services
 
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            return await _client.GetFromJsonAsync<Animal>($""); //need to add api extension
+            return await _client.GetFromJsonAsync<Animal>($"https://api.petfinder.com/v2/");
+        }
+        public Task<IActionResult> Create(Animal animal)
+        {
+            throw new NotImplementedException();
+        
         }
     }
 }
