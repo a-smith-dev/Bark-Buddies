@@ -18,4 +18,8 @@
     <PackageReference Include="System.Net.Http.Json" Version="3.2.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Empty folder\" />
+  </ItemGroup>
+
 </Project>

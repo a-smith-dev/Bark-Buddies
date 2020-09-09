@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BarkBuddies.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace BarkBuddies.Data
         }
 
         public DbSet<Animal> Animals { get; set; }
+        public DbSet<User> Users { get; set; }
 
     }
 }
