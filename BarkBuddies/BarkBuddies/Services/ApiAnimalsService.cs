@@ -4,8 +4,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Collections.Specialized;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -30,7 +29,16 @@ namespace BarkBuddies.Services
 
         public async Task<ApiResponse> Get()
         {
-            string token = await _cache.GetOrCreateAsync(CacheKey, async entry =>
+            string token = GetToken().Result;
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            return await _client.GetFromJsonAsync<ApiResponse>($"animals"); //append the user's query to this to narrow the search
+        }
+
+        private async Task<string> GetToken()
+        {
+            var token = await _cache.GetOrCreateAsync(CacheKey, async entry =>
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30);
                 var content = new StringContent(JsonConvert.SerializeObject(
@@ -43,19 +51,25 @@ namespace BarkBuddies.Services
 
                 var response = await _client.PostAsync("oauth2/token", content);
                 return await response.Content.ReadAsStringAsync();
-               
-            });
-            token = token.Replace("\"", "");
-            token = token.Replace("token_type:Bearer,expires_in:3600,access_token:", "");
-            token = token.Replace("{", string.Empty).Replace("}", string.Empty);
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            return await _client.GetFromJsonAsync<ApiResponse>($"animals");
+            });
+            token = token.Replace("\"", "")
+                         .Replace("token_type:Bearer,expires_in:3600,access_token:", "")
+                         .Replace("{", string.Empty)
+                         .Replace("}", string.Empty);
+
+            return token;
         }
+
         public Task<IActionResult> Create(Animal animal)
         {
             throw new NotImplementedException();
         
+        }
+
+        public Task<ApiResponse> Get(NameValueCollection nvc)
+        {
+            throw new NotImplementedException();
         }
     }
 }

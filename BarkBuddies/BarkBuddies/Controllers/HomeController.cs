@@ -43,6 +43,12 @@ namespace BarkBuddies.Controllers
             var model = details.Animals[0];
             return View(model);
         }
+        public IActionResult DetailsList()
+        {
+            var details = _service.Get().Result;
+            var model = details.Animals.ToList();
+            return View(model);
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
