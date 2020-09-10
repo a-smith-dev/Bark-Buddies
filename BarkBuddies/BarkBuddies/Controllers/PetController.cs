@@ -18,27 +18,34 @@ namespace BarkBuddies.Controllers
         {
             _context = context;
         }
-        public ActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+           //add in code to filter to userID
+            return View(await _context.Pets.ToListAsync());
         }
 
-        // GET: PetController/Details/5
-        public async Task<ActionResult> DetailsAsync(int id)
+        public async Task<ActionResult> Details(int? id)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
             var pet = await _context.Pets
                 .FirstOrDefaultAsync(m => m.PetId == id);
+            if (pet == null)
+            {
+                return NotFound();
+            }
 
             return View(pet);
         }
 
-        // GET: PetController/Create
-        public ActionResult Create()
+        public IActionResult Create()
         {
             return View();
         }
 
-        // POST: PetController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name,Age,Gender,Size,Breed")] Pet pet)
@@ -47,52 +54,90 @@ namespace BarkBuddies.Controllers
             {
                 _context.Add(pet);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(DetailsAsync));
+                return RedirectToAction(nameof(Details));
             }
             return View(pet);
         }
 
- 
-        // GET: PetController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var pet = await _context.Pets.FindAsync(id);
+            if (pet == null)
+            {
+                return NotFound();
+            }
+            return View(pet);
         }
 
-        // POST: PetController/Edit/5
+    
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(int id, [Bind("PetId,Name,Age,Gender,Size,Breed")] Pet pet)
         {
-            try
+            if (id != pet.PetId)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-            catch
+
+            if (ModelState.IsValid)
             {
-                return View();
+                try
+                {
+                    _context.Update(pet);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!PetExists(pet.PetId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Details), new {id=id});
             }
+            return View(pet);
         }
 
-        // GET: PetController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var pet = await _context.Pets
+                .FirstOrDefaultAsync(m => m.PetId == id);
+
+            if (pet == null)
+            {
+                return NotFound();
+            }
+
+            return View(pet);
         }
 
-        // POST: PetController/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> ConfirmDelete(int id)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            var pet = await _context.Pets.FindAsync(id);
+            _context.Pets.Remove(pet);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
-    }
+
+        private bool PetExists(int id)
+        {
+            return _context.Pets.Any(p => p.PetId == id);
+        }
+    }        
 }

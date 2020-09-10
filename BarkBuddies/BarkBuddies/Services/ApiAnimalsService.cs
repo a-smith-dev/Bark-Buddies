@@ -19,15 +19,15 @@ namespace BarkBuddies.Services
 {
     public class ApiAnimalsService : IAnimalsService
     {
-        private readonly HttpContext _context;
+       
         private readonly HttpClient _client;
         private readonly IMemoryCache _cache;
         private readonly PetFinderApiCredentials _petfinderDetails;
         private const string CacheKey = "TokenCacheKey";
 
-        public ApiAnimalsService(HttpContext context, HttpClient client, IMemoryCache cache, IOptions<PetFinderApiCredentials> petfinderDetails)
+        public ApiAnimalsService(HttpClient client, IMemoryCache cache, IOptions<PetFinderApiCredentials> petfinderDetails)
         {
-            _context = context;
+           
             _client = client;
             _cache = cache;
             _petfinderDetails = petfinderDetails.Value;
