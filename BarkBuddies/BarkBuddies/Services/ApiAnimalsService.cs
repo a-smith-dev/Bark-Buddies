@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
+using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -75,46 +76,93 @@ namespace BarkBuddies.Services
         {
             string token = GetToken().Result;
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            string query = GetQuery(petList, choice);
+            string query = GetQuery(petList /*, string choice*/);
 
             return await _client.GetFromJsonAsync<ApiResponse>($"animals?{query}");
         }
 
-        private string GetQuery(IEnumerable<Pet> petList, string choice)
+        private string GetQuery(IEnumerable<Pet> petList /*, string choice*/)
         {
             var queryString = HttpUtility.ParseQueryString(string.Empty);
             queryString.Add("type", "dog");
-            queryString.Add("location", "zipCodeFromUserHere"); // zip code from user. Possibly pass in user?
+            //queryString.Add("location", "zipCodeFromUserHere"); // zip code from user. Possibly pass in user?
 
             foreach (var pet in petList)
             {
-                queryString.Add("size", GetSize(pet.Size, choice));
+                queryString.Add("size", pet.Size.ToString("G"));
+                queryString.Add("age", pet.Age.ToString("G"));
+                //queryString.Add("size", GetSize(pet.Size, choice));
+                //queryString.Add("age", GetAge(pet.Age, choice));
             }
 
             return queryString.ToString();
         }
 
-        private string GetSize(string size, string choice) // GetSize(Enum size, string choice)
+        private string GetSize(Size size, string choice)
         {
             switch (choice)
             {
                 case "smaller":
-                    if (size == "small")
-                        return size;
-                    return "size minus one"; // return (size - 1).ToString();
+                    if (size == Size.small)
+                        return size.ToString("G");
+                    return DecreaseSize(size).ToString("G");
                 case "same":
-                    return size;
+                    return size.ToString("G");
                 default:
-                    if (size == "xlarge")
-                        return size;
-                    return "size plus one";
+                    if (size == Size.xlarge)
+                        return size.ToString("G");
+                    return IncreaseSize(size).ToString("G");
             }
         }
 
-        //private string GetAge(Enum age, string choice)
-        //{
+        private Size IncreaseSize(Size size)
+        {
+            var newSize = 0;
+            var sizeInt = size.ToString("D");
+            int.TryParse(sizeInt, out newSize);
+            return (Size)(newSize + 1);
+        }
 
-        //}
+        private Size DecreaseSize(Size size)
+        {
+            var newSize = 1;
+            var sizeInt = size.ToString("D");
+            int.TryParse(sizeInt, out newSize);
+            return (Size)(newSize - 1);
+        }
+
+        private string GetAge(Age age, string choice)
+        {
+            switch (choice)
+            {
+                case "younger":
+                    if (age == Age.baby)
+                        return age.ToString("G");
+                    return DecreaseAge(age).ToString("G");
+                case "same":
+                    return age.ToString("G");
+                default:
+                    if (age == Age.senior)
+                        return age.ToString("G");
+                    return IncreaseAge(age).ToString("G");
+            }
+        }
+
+        private Age IncreaseAge(Age age)
+        {
+            var newAge = 0;
+            var sizeInt = age.ToString("D");
+            int.TryParse(sizeInt, out newAge);
+            return (Age)(newAge + 1);
+        }
+
+        private Age DecreaseAge(Age age)
+        {
+            var newAge = 1;
+            var sizeInt = age.ToString("D");
+            int.TryParse(sizeInt, out newAge);
+            return (Age)(newAge - 1);
+        }
 
     }
 }
