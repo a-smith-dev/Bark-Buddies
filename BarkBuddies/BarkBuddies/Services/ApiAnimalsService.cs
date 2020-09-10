@@ -1,27 +1,32 @@
 ﻿using BarkBuddies.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Specialized;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace BarkBuddies.Services
 {
     public class ApiAnimalsService : IAnimalsService
     {
+        private readonly HttpContext _context;
         private readonly HttpClient _client;
         private readonly IMemoryCache _cache;
         private readonly PetFinderApiCredentials _petfinderDetails;
         private const string CacheKey = "TokenCacheKey";
 
-        public ApiAnimalsService(HttpClient client, IMemoryCache cache, IOptions<PetFinderApiCredentials> petfinderDetails)
+        public ApiAnimalsService(HttpContext context, HttpClient client, IMemoryCache cache, IOptions<PetFinderApiCredentials> petfinderDetails)
         {
+            _context = context;
             _client = client;
             _cache = cache;
             _petfinderDetails = petfinderDetails.Value;
@@ -30,8 +35,8 @@ namespace BarkBuddies.Services
         public async Task<ApiResponse> Get()
         {
             string token = GetToken().Result;
-
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
 
             return await _client.GetFromJsonAsync<ApiResponse>($"animals"); //append the user's query to this to narrow the search
         }
@@ -64,12 +69,52 @@ namespace BarkBuddies.Services
         public Task<IActionResult> Create(Animal animal)
         {
             throw new NotImplementedException();
-        
         }
 
-        public Task<ApiResponse> Get(NameValueCollection nvc)
+        public async Task<ApiResponse> Get(IEnumerable<Pet> petList, string choice)
         {
-            throw new NotImplementedException();
+            string token = GetToken().Result;
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            string query = GetQuery(petList, choice);
+
+            return await _client.GetFromJsonAsync<ApiResponse>($"animals?{query}");
         }
+
+        private string GetQuery(IEnumerable<Pet> petList, string choice)
+        {
+            var queryString = HttpUtility.ParseQueryString(string.Empty);
+            queryString.Add("type", "dog");
+            queryString.Add("location", "zipCodeFromUserHere"); // zip code from user. Possibly pass in user?
+
+            foreach (var pet in petList)
+            {
+                queryString.Add("size", GetSize(pet.Size, choice));
+            }
+
+            return queryString.ToString();
+        }
+
+        private string GetSize(string size, string choice) // GetSize(Enum size, string choice)
+        {
+            switch (choice)
+            {
+                case "smaller":
+                    if (size == "small")
+                        return size;
+                    return "size minus one"; // return (size - 1).ToString();
+                case "same":
+                    return size;
+                default:
+                    if (size == "xlarge")
+                        return size;
+                    return "size plus one";
+            }
+        }
+
+        //private string GetAge(Enum age, string choice)
+        //{
+
+        //}
+
     }
 }

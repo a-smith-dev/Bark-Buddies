@@ -11,7 +11,7 @@ namespace BarkBuddies.Services
    public interface IAnimalsService
     {
         Task<ApiResponse> Get();
-        Task<ApiResponse> Get(NameValueCollection nvc);
+        Task<ApiResponse> Get(IEnumerable<Pet> petList, string choice);
         Task<IActionResult> Create(Animal animal);
 
     }
