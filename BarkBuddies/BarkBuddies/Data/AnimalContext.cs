@@ -14,8 +14,9 @@ namespace BarkBuddies.Data
         {
         }
 
-        public DbSet<Animal> Animals { get; set; }
+        public DbSet<Pet> Pets { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<PetMatch> PetMatch { get; set; }
 
     }
 }
