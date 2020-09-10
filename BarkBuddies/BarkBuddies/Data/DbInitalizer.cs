@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using BarkBuddies.Models;
+using System.Linq;
 
 namespace BarkBuddies.Data
 {
@@ -7,9 +8,9 @@ namespace BarkBuddies.Data
         public static void Initialize(AnimalContext context)
         {
             context.Database.EnsureCreated();
-            if (!context.Animals.Any())
+            if (!context.Pets.Any())
             {
-                context.Animals.Add(new Animal() { Age = "3", Name = "Sadie", Gender = "Female" });
+                context.Pets.Add(new Pet() { Name = "Sadie", Age = "adult", Gender = "Female", Size = "small", Breed = "mixed"});
 
             }
             context.SaveChanges();
