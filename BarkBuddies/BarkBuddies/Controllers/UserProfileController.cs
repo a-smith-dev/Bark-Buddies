@@ -2,86 +2,142 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BarkBuddies.Data;
+using BarkBuddies.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BarkBuddies.Controllers
 {
     public class UserProfileController : Controller
     {
-        // GET: UserController
-        public ActionResult Index()
+        private readonly AnimalContext _context;
+
+        public UserProfileController(AnimalContext context)
         {
-            return View();
+            _context = context;
+        }
+        public async Task<IActionResult> Index()
+        {
+            //add in code to filter to userID
+            return View(await _context.UserProfiles.ToListAsync());
+        }
+ 
+        public async Task<ActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var profile = await _context.Pets
+                .FirstOrDefaultAsync(m => m.UserProfileId == id);
+            if (profile == null)
+            {
+                return NotFound();
+            }
+
+            return View(profile);
         }
 
-        // GET: UserController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
 
-        // GET: UserController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: UserController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> Create([Bind("ZipCode,HasChildren,HasCats")] UserProfile profile)
         {
-            try
+            if (ModelState.IsValid)
             {
+                _context.Add(profile);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+            return View(profile);
         }
 
-        // GET: UserController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var profile = await _context.UserProfiles.FindAsync(id);
+            if (profile == null)
+            {
+                return NotFound();
+            }
+            return View(profile);
         }
 
-        // POST: UserController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(int id, [Bind("UserProfileId,ZipCode,HasChildren,HasCats")] UserProfile profile)
         {
-            try
+            if (id != profile.UserProfileId)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-            catch
+
+            if (ModelState.IsValid)
             {
-                return View();
+                try
+                {
+                    _context.Update(profile);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ProfileExists(profile.UserProfileId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Details), new {id});
             }
+            return View(profile);
         }
 
-        // GET: UserController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var profile = await _context.UserProfiles
+                .FirstOrDefaultAsync(m => m.UserProfileId == id);
+
+            if (profile == null)
+            {
+                return NotFound();
+            }
+
+            return View(profile);
         }
 
-        // POST: UserController/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> ConfirmDelete(int id)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            var profile = await _context.UserProfiles.FindAsync(id);
+            _context.UserProfiles.Remove(profile);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool ProfileExists(int id)
+        {
+            return _context.UserProfiles.Any(p => p.UserProfileId == id);
         }
     }
 }

@@ -54,7 +54,7 @@ namespace BarkBuddies.Controllers
             {
                 _context.Add(pet);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Details));
+                return RedirectToAction(nameof(Index));
             }
             return View(pet);
         }
@@ -102,7 +102,7 @@ namespace BarkBuddies.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Details), new {id=id});
+                return RedirectToAction(nameof(Details), new {id});
             }
             return View(pet);
         }
