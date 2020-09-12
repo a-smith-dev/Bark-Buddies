@@ -12,7 +12,6 @@ namespace BarkBuddies.Controllers
 {
     public class UserProfileController : Controller
     {
-        // GET: UserController
         private readonly AnimalContext _context;
 
         public UserProfileController(AnimalContext context)
