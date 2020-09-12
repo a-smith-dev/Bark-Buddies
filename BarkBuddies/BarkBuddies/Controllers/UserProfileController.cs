@@ -10,20 +10,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BarkBuddies.Controllers
 {
-    public class PetController : Controller
+    public class UserProfileController : Controller
     {
+        // GET: UserController
         private readonly AnimalContext _context;
 
-        public PetController(AnimalContext context)
+        public UserProfileController(AnimalContext context)
         {
             _context = context;
         }
         public async Task<IActionResult> Index()
         {
-           //add in code to filter to userID
-            return View(await _context.Pets.ToListAsync());
+            //add in code to filter to userID
+            return View(await _context.UserProfiles.ToListAsync());
         }
-
+ 
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -31,32 +32,33 @@ namespace BarkBuddies.Controllers
                 return NotFound();
             }
 
-            var pet = await _context.Pets
-                .FirstOrDefaultAsync(m => m.PetId == id);
-            if (pet == null)
+            var profile = await _context.Pets
+                .FirstOrDefaultAsync(m => m.UserProfileId == id);
+            if (profile == null)
             {
                 return NotFound();
             }
 
-            return View(pet);
+            return View(profile);
         }
 
-        public IActionResult Create()
+
+        public ActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Age,Gender,Size,Breed")] Pet pet)
+        public async Task<IActionResult> Create([Bind("ZipCode,HasChildren,HasCats")] UserProfile profile)
         {
-             if (ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                _context.Add(pet);
+                _context.Add(profile);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(pet);
+            return View(profile);
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -66,20 +68,19 @@ namespace BarkBuddies.Controllers
                 return NotFound();
             }
 
-            var pet = await _context.Pets.FindAsync(id);
-            if (pet == null)
+            var profile = await _context.UserProfiles.FindAsync(id);
+            if (profile == null)
             {
                 return NotFound();
             }
-            return View(pet);
+            return View(profile);
         }
 
-    
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PetId,Name,Age,Gender,Size,Breed")] Pet pet)
+        public async Task<IActionResult> Edit(int id, [Bind("UserProfileId,ZipCode,HasChildren,HasCats")] UserProfile profile)
         {
-            if (id != pet.PetId)
+            if (id != profile.UserProfileId)
             {
                 return NotFound();
             }
@@ -88,12 +89,12 @@ namespace BarkBuddies.Controllers
             {
                 try
                 {
-                    _context.Update(pet);
+                    _context.Update(profile);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PetExists(pet.PetId))
+                    if (!ProfileExists(profile.UserProfileId))
                     {
                         return NotFound();
                     }
@@ -104,7 +105,7 @@ namespace BarkBuddies.Controllers
                 }
                 return RedirectToAction(nameof(Details), new {id});
             }
-            return View(pet);
+            return View(profile);
         }
 
         public async Task<IActionResult> Delete(int? id)
@@ -114,30 +115,30 @@ namespace BarkBuddies.Controllers
                 return NotFound();
             }
 
-            var pet = await _context.Pets
-                .FirstOrDefaultAsync(m => m.PetId == id);
+            var profile = await _context.UserProfiles
+                .FirstOrDefaultAsync(m => m.UserProfileId == id);
 
-            if (pet == null)
+            if (profile == null)
             {
                 return NotFound();
             }
 
-            return View(pet);
+            return View(profile);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ConfirmDelete(int id)
         {
-            var pet = await _context.Pets.FindAsync(id);
-            _context.Pets.Remove(pet);
+            var profile = await _context.UserProfiles.FindAsync(id);
+            _context.UserProfiles.Remove(profile);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PetExists(int id)
+        private bool ProfileExists(int id)
         {
-            return _context.Pets.Any(p => p.PetId == id);
+            return _context.UserProfiles.Any(p => p.UserProfileId == id);
         }
-    }        
+    }
 }
