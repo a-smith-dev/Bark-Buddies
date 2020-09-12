@@ -1,4 +1,6 @@
-﻿namespace BarkBuddies.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace BarkBuddies.Models
 {
     public class Pet
     {
@@ -8,6 +10,9 @@
         public string Gender { get; set; }
         public Size Size { get; set; }
         public string Breed { get; set; }
+
+        [ForeignKey("UserId")]
+        public int UserId { get; set; }
     }
 
     public enum Size

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BarkBuddies.Controllers
 {
-    public class UserController : Controller
+    public class UserProfileController : Controller
     {
         // GET: UserController
         public ActionResult Index()

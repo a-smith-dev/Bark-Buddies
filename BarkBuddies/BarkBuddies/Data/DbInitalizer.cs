@@ -10,7 +10,7 @@ namespace BarkBuddies.Data
             context.Database.EnsureCreated();
             if (!context.Pets.Any())
             {
-                context.Pets.Add(new Pet() { Name = "Sadie", Age = "adult", Gender = "Female", Size = "small", Breed = "mixed"});
+           //     context.Pets.Add(new Pet() { Name = "Sadie", Age = "adult", Gender = "Female", Size = "small", Breed = "mixed"});
 
             }
             context.SaveChanges();
