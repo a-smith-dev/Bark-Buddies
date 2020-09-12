@@ -8,11 +8,11 @@ namespace BarkBuddies.Data
         public static void Initialize(AnimalContext context)
         {
             context.Database.EnsureCreated();
-            if (!context.Pets.Any())
-            {
-                context.Pets.Add(new Pet() { Name = "Sadie", Age = "adult", Gender = "Female", Size = "small", Breed = "mixed"});
+            //if (!context.Pets.Any())
+            //{
+            //    context.Pets.Add(new Pet() { Name = "Sadie", Age = Age.adult, Gender = "Female", Size = Size.medium, Breed = "mixed"});
 
-            }
+            //}
             context.SaveChanges();
         }
     }

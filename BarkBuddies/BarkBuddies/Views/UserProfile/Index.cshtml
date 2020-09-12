@@ -1,0 +1,47 @@
+﻿@model IEnumerable<BarkBuddies.Models.UserProfile>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ZipCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HasChildren)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HasCats)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ZipCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HasChildren)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HasCats)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.UserProfileId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.UserProfileId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.UserProfileId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
