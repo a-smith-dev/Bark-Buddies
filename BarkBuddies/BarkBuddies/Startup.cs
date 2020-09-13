@@ -37,9 +37,8 @@ namespace BarkBuddies
             services.AddDbContext<AnimalContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("OurDatabase")));
-            services.AddDefaultIdentity<UserProfile>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<AnimalContext>().AddDefaultTokenProviders();
-
 
             services.AddHttpClient<IAnimalsService, ApiAnimalsService>(o =>
             {

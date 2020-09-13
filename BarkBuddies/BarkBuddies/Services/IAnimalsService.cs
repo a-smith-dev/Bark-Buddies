@@ -1,4 +1,5 @@
-﻿using BarkBuddies.Models;
+﻿using BarkBuddies.Data.Entities;
+using BarkBuddies.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BarkBuddies.Services
 {
-   public interface IAnimalsService
+    public interface IAnimalsService
     {
         Task<ApiResponse> Get();
         Task<ApiResponse> Get(IEnumerable<Pet> petList, string choice);

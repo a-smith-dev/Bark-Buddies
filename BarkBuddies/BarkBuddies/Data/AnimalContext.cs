@@ -1,10 +1,11 @@
-﻿using BarkBuddies.Models;
+﻿using BarkBuddies.Data.Entities;
+using BarkBuddies.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BarkBuddies.Data
 {
-    public class AnimalContext : IdentityDbContext<UserProfile>
+    public class AnimalContext : IdentityDbContext
     {
         public AnimalContext(DbContextOptions<AnimalContext> options)
            : base(options)
@@ -12,8 +13,7 @@ namespace BarkBuddies.Data
         }
 
         public DbSet<Pet> Pets { get; set; }
-        public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<PetMatch> PetMatch { get; set; }
-        
+        public DbSet<UserProfile> UserProfiles { get; set; }
     }
 }

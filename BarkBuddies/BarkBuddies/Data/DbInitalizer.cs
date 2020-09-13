@@ -1,4 +1,5 @@
 ﻿using BarkBuddies.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace BarkBuddies.Data
@@ -7,7 +8,7 @@ namespace BarkBuddies.Data
     {
         public static void Initialize(AnimalContext context)
         {
-            context.Database.EnsureCreated();
+            context.Database.Migrate();
             context.SaveChanges();
         }
     }

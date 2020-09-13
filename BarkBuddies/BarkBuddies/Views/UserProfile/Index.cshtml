@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BarkBuddies.Models.UserProfile>
+﻿@model UserProfile
 
 @{
     ViewData["Title"] = "Index";
@@ -25,23 +25,21 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.ZipCode)
+                @Html.DisplayFor(modelItem => Model.ZipCode)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.HasChildren)
+                @Html.DisplayFor(modelItem => Model.HasChildren)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.HasCats)
+                @Html.DisplayFor(modelItem => Model.HasCats)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@Model.User.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@Model.User.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@Model.User.Id">Delete</a>
             </td>
         </tr>
-}
     </tbody>
 </table>

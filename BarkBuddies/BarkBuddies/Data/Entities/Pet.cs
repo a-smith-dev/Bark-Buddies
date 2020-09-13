@@ -1,24 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Runtime.InteropServices;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
-namespace BarkBuddies.Models
+namespace BarkBuddies.Data.Entities
 {
     public class Pet
     {
-        [Key]
         public int PetId { get; set; }
-
-        [ForeignKey("Id")]
-        public int UserProfileId { get; set; }
         public string Name { get; set; }
         public Age Age { get; set; }
         public string Gender { get; set; }
         public Size Size { get; set; }
         public string Breed { get; set; }
 
-        public virtual UserProfile UserProfile { get; set; }
-        public virtual string Id { get; set; }
+        public IdentityUser Owner { get; set; }
     }
 
     public enum Size
@@ -40,7 +34,7 @@ namespace BarkBuddies.Models
     {
         [Display(Name = "Puppy")]
         baby = 0,
-        
+
         [Display(Name = "Young")]
         young,
 

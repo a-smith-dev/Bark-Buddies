@@ -14,16 +14,16 @@ namespace BarkBuddies.Controllers
         private readonly AnimalContext _context;
 
         //private readonly IAnimalsService _service;
-        private readonly AspNetUserManager<UserProfile> _userManager;
+        private readonly AspNetUserManager<IdentityUser> _userManager;
 
-        public UserProfileController(AnimalContext context/*, IAnimalsService service*/, AspNetUserManager<UserProfile> userManager)
+        public UserProfileController(AnimalContext context/*, IAnimalsService service*/, AspNetUserManager<IdentityUser> userManager)
         {
             _context = context;
             //_service = service;
             _userManager = userManager;
         }
 
-        public UserProfile GetCurrentUser()
+        public IdentityUser GetCurrentUser()
         {
             ClaimsPrincipal currentUser = User;
             var user = _userManager.GetUserAsync(currentUser).Result;
@@ -36,16 +36,16 @@ namespace BarkBuddies.Controllers
             //return View(await _context.UserProfiles.ToListAsync());
             return View(await _context.UserProfiles.FindAsync(currentId));
         }
- 
-        public async Task<ActionResult> Details(int? id)
+
+        public async Task<ActionResult> Details(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var profile = await _context.Pets
-                .FirstOrDefaultAsync(m => m.UserProfileId == id);
+            var profile = await _context.UserProfiles
+                .FirstOrDefaultAsync(m => m.User.Id == id);
             if (profile == null)
             {
                 return NotFound();
@@ -90,9 +90,9 @@ namespace BarkBuddies.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("UserProfileId,ZipCode,HasChildren,HasCats")] UserProfile profile)
+        public async Task<IActionResult> Edit(string id, [Bind("Id,ZipCode,HasChildren,HasCats")] UserProfile profile)
         {
-            if (id != profile.Id)
+            if (id != profile.User.Id)
             {
                 return NotFound();
             }
@@ -106,7 +106,7 @@ namespace BarkBuddies.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProfileExists(profile.Id))
+                    if (!ProfileExists(profile.User.Id))
                     {
                         return NotFound();
                     }
@@ -115,7 +115,7 @@ namespace BarkBuddies.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Details), new {id});
+                return RedirectToAction(nameof(Details), new { id });
             }
             return View(profile);
         }
@@ -128,7 +128,7 @@ namespace BarkBuddies.Controllers
             }
 
             var profile = await _context.UserProfiles
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.User.Id == id);
 
             if (profile == null)
             {
@@ -150,7 +150,7 @@ namespace BarkBuddies.Controllers
 
         private bool ProfileExists(string id)
         {
-            return _context.UserProfiles.Any(p => p.Id == id);
+            return _context.UserProfiles.Any(p => p.User.Id == id);
         }
     }
 }

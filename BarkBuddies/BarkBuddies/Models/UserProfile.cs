@@ -1,17 +1,18 @@
 
+using BarkBuddies.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace BarkBuddies.Models
 {
-    public class UserProfile : IdentityUser
+    public class UserProfile
     {
-        public override string Id { get; set; }
+        public int Id { get; set; }
         public int ZipCode { get; set; }
         public bool HasChildren { get; set; }
         public bool HasCats { get; set; }
-        public Pet[] Pets { get; set; }
+        public IdentityUser User { get; set; }
     }
 }
 
