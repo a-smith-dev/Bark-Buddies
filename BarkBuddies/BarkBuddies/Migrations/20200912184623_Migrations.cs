@@ -80,7 +80,7 @@ namespace BarkBuddies.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Pets", x => x.PetId);
+                    table.PrimaryKey("PK_Pets", x => x.PetId); 
                 });
 
             migrationBuilder.CreateTable(
