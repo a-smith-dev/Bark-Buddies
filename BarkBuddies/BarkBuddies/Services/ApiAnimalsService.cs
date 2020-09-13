@@ -1,6 +1,7 @@
 ﻿using BarkBuddies.Data.Entities;
 using BarkBuddies.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
@@ -20,7 +21,6 @@ namespace BarkBuddies.Services
 {
     public class ApiAnimalsService : IAnimalsService
     {
-       
         private readonly HttpClient _client;
         private readonly IMemoryCache _cache;
         private readonly PetFinderApiCredentials _petfinderDetails;
@@ -28,7 +28,6 @@ namespace BarkBuddies.Services
 
         public ApiAnimalsService(HttpClient client, IMemoryCache cache, IOptions<PetFinderApiCredentials> petfinderDetails)
         {
-           
             _client = client;
             _cache = cache;
             _petfinderDetails = petfinderDetails.Value;
@@ -73,20 +72,20 @@ namespace BarkBuddies.Services
             throw new NotImplementedException();
         }
 
-        public async Task<ApiResponse> Get(IEnumerable<Pet> petList, string choice)
+        public async Task<ApiResponse> Get(IEnumerable<Pet> petList, UserProfile user) //, string choice
         {
             string token = GetToken().Result;
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            string query = GetQuery(petList /*, string choice*/);
+            string query = GetQuery(petList, user); /*, string choice*/
 
             return await _client.GetFromJsonAsync<ApiResponse>($"animals?{query}");
         }
 
-        private string GetQuery(IEnumerable<Pet> petList /*, string choice*/)
+        private string GetQuery(IEnumerable<Pet> petList, UserProfile user)  /*, string choice*/
         {
             var queryString = HttpUtility.ParseQueryString(string.Empty);
             queryString.Add("type", "dog");
-            //queryString.Add("location", "zipCodeFromUserHere"); // zip code from user. Possibly pass in user?
+            queryString.Add("location", $"{user.ZipCode}");
 
             foreach (var pet in petList)
             {

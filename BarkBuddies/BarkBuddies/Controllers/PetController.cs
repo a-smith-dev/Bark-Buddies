@@ -1,27 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using BarkBuddies.Data;
 using BarkBuddies.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BarkBuddies.Controllers
 {
+ 
     public class PetController : Controller
     {
         private readonly AnimalContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public PetController(AnimalContext context)
+        public PetController(AnimalContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
         public async Task<IActionResult> Index()
         {
-           //add in code to filter to userID
-            return View(await _context.Pets.ToListAsync());
+            var currentUser = GetCurrentUserAsync().Result;
+           
+            return View(await _context.Pets.Where(x => x.Owner.Equals(currentUser)).ToListAsync());
         }
 
         public async Task<ActionResult> Details(int? id)
@@ -43,7 +51,9 @@ namespace BarkBuddies.Controllers
 
         public IActionResult Create()
         {
+        
             return View();
+
         }
 
         [HttpPost]
@@ -52,7 +62,10 @@ namespace BarkBuddies.Controllers
         {
              if (ModelState.IsValid)
             {
-                _context.Add(pet);
+                var currentUser = await GetCurrentUserAsync();
+                var thisPet = pet;
+                thisPet.Owner = currentUser;
+                _context.Add(thisPet);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -139,5 +152,14 @@ namespace BarkBuddies.Controllers
         {
             return _context.Pets.Any(p => p.PetId == id);
         }
+
+        private async Task<UserProfile> GetProfileAsync(string userId)
+        {
+            return await _context.UserProfiles.FirstOrDefaultAsync(x => x.User.Id == userId);
+        }
+
+        private async Task<IdentityUser> GetCurrentUserAsync() => await _userManager.GetUserAsync(User);
+
+        private bool ProfileExists(IdentityUser user) => _context.UserProfiles.Any(p => p.User.Id == user.Id);
     }        
 }

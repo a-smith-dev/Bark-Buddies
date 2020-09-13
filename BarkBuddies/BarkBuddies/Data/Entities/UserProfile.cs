@@ -12,6 +12,7 @@ namespace BarkBuddies.Data.Entities
         public int ZipCode { get; set; }
         public bool HasChildren { get; set; }
         public bool HasCats { get; set; }
+        //public List<Pet> Pets { get; set; }
         public IdentityUser User { get; set; }
     }
 }
