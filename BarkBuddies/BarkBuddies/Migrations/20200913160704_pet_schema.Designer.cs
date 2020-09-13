@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BarkBuddies.Migrations
 {
     [DbContext(typeof(AnimalContext))]
-    [Migration("20200912184623_Migrations")]
-    partial class Migrations
+    [Migration("20200913160704_pet_schema")]
+    partial class pet_schema
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -40,10 +40,15 @@ namespace BarkBuddies.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("OwnerId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("Size")
                         .HasColumnType("int");
 
                     b.HasKey("PetId");
+
+                    b.HasIndex("OwnerId");
 
                     b.ToTable("Pets");
                 });
@@ -82,30 +87,6 @@ namespace BarkBuddies.Migrations
                     b.HasKey("PetMatchId");
 
                     b.ToTable("PetMatch");
-                });
-
-            modelBuilder.Entity("BarkBuddies.Models.UserProfile", b =>
-                {
-                    b.Property<int>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("HasCats")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("HasChildren")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("PetId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ZipCode")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId");
-
-                    b.ToTable("UserProfile");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -306,6 +287,13 @@ namespace BarkBuddies.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("BarkBuddies.Data.Entities.Pet", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

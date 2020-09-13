@@ -19,7 +19,7 @@ namespace BarkBuddies.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("BarkBuddies.Models.Pet", b =>
+            modelBuilder.Entity("BarkBuddies.Data.Entities.Pet", b =>
                 {
                     b.Property<int>("PetId")
                         .ValueGeneratedOnAdd()
@@ -38,15 +38,20 @@ namespace BarkBuddies.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("OwnerId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("Size")
                         .HasColumnType("int");
 
                     b.HasKey("PetId");
 
+                    b.HasIndex("OwnerId");
+
                     b.ToTable("Pets");
                 });
 
-            modelBuilder.Entity("BarkBuddies.Models.PetMatch", b =>
+            modelBuilder.Entity("BarkBuddies.Data.Entities.PetMatch", b =>
                 {
                     b.Property<int>("PetMatchId")
                         .ValueGeneratedOnAdd()
@@ -80,30 +85,6 @@ namespace BarkBuddies.Migrations
                     b.HasKey("PetMatchId");
 
                     b.ToTable("PetMatch");
-                });
-
-            modelBuilder.Entity("BarkBuddies.Models.UserProfile", b =>
-                {
-                    b.Property<int>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("HasCats")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("HasChildren")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("PetId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ZipCode")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId");
-
-                    b.ToTable("UserProfile");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -304,6 +285,13 @@ namespace BarkBuddies.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("BarkBuddies.Data.Entities.Pet", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

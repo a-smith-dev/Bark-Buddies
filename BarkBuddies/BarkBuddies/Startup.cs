@@ -1,24 +1,14 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using BarkBuddies.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using BarkBuddies.Services;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using System.Net.Http;
-using Newtonsoft.Json;
-using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using System.Net.Http.Headers;
 using BarkBuddies.Models;
 
 namespace BarkBuddies
@@ -36,6 +26,7 @@ namespace BarkBuddies
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMemoryCache();
+            //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddAuthentication();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(o =>
@@ -47,8 +38,8 @@ namespace BarkBuddies
                 options.UseSqlServer(
                     Configuration.GetConnectionString("OurDatabase")));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<AnimalContext>();
-            
+                .AddEntityFrameworkStores<AnimalContext>().AddDefaultTokenProviders();
+
             services.AddHttpClient<IAnimalsService, ApiAnimalsService>(o =>
             {
                 o.BaseAddress = new Uri(Configuration["Api:BaseAddress"]);

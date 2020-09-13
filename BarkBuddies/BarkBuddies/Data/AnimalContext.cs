@@ -1,11 +1,7 @@
-﻿using BarkBuddies.Models;
-using Microsoft.AspNetCore.Identity;
+﻿using BarkBuddies.Data.Entities;
+using BarkBuddies.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BarkBuddies.Data
 {
@@ -17,8 +13,7 @@ namespace BarkBuddies.Data
         }
 
         public DbSet<Pet> Pets { get; set; }
-        public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<PetMatch> PetMatch { get; set; }
-        
+        public DbSet<UserProfile> UserProfiles { get; set; }
     }
 }

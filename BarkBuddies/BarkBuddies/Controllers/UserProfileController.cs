@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using BarkBuddies.Data;
 using BarkBuddies.Models;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,25 +13,39 @@ namespace BarkBuddies.Controllers
     {
         private readonly AnimalContext _context;
 
-        public UserProfileController(AnimalContext context)
+        //private readonly IAnimalsService _service;
+        private readonly AspNetUserManager<IdentityUser> _userManager;
+
+        public UserProfileController(AnimalContext context/*, IAnimalsService service*/, AspNetUserManager<IdentityUser> userManager)
         {
             _context = context;
+            //_service = service;
+            _userManager = userManager;
         }
+
+        public IdentityUser GetCurrentUser()
+        {
+            ClaimsPrincipal currentUser = User;
+            var user = _userManager.GetUserAsync(currentUser).Result;
+            return user;
+        }
+
         public async Task<IActionResult> Index()
         {
-            //add in code to filter to userID
-            return View(await _context.UserProfiles.ToListAsync());
+            var currentId = GetCurrentUser().Id;
+            //return View(await _context.UserProfiles.ToListAsync());
+            return View(await _context.UserProfiles.FindAsync(currentId));
         }
- 
-        public async Task<ActionResult> Details(int? id)
+
+        public async Task<ActionResult> Details(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var profile = await _context.Pets
-                .FirstOrDefaultAsync(m => m.UserProfileId == id);
+            var profile = await _context.UserProfiles
+                .FirstOrDefaultAsync(m => m.User.Id == id);
             if (profile == null)
             {
                 return NotFound();
@@ -77,9 +90,9 @@ namespace BarkBuddies.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserProfileId,ZipCode,HasChildren,HasCats")] UserProfile profile)
+        public async Task<IActionResult> Edit(string id, [Bind("Id,ZipCode,HasChildren,HasCats")] UserProfile profile)
         {
-            if (id != profile.UserProfileId)
+            if (id != profile.User.Id)
             {
                 return NotFound();
             }
@@ -93,7 +106,7 @@ namespace BarkBuddies.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProfileExists(profile.UserProfileId))
+                    if (!ProfileExists(profile.User.Id))
                     {
                         return NotFound();
                     }
@@ -102,20 +115,20 @@ namespace BarkBuddies.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Details), new {id});
+                return RedirectToAction(nameof(Details), new { id });
             }
             return View(profile);
         }
 
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(string id)
         {
-            if (id == null)
+            if (id == string.Empty)
             {
                 return NotFound();
             }
 
             var profile = await _context.UserProfiles
-                .FirstOrDefaultAsync(m => m.UserProfileId == id);
+                .FirstOrDefaultAsync(m => m.User.Id == id);
 
             if (profile == null)
             {
@@ -127,7 +140,7 @@ namespace BarkBuddies.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ConfirmDelete(int id)
+        public async Task<IActionResult> ConfirmDelete(string id)
         {
             var profile = await _context.UserProfiles.FindAsync(id);
             _context.UserProfiles.Remove(profile);
@@ -135,9 +148,9 @@ namespace BarkBuddies.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProfileExists(int id)
+        private bool ProfileExists(string id)
         {
-            return _context.UserProfiles.Any(p => p.UserProfileId == id);
+            return _context.UserProfiles.Any(p => p.User.Id == id);
         }
     }
 }

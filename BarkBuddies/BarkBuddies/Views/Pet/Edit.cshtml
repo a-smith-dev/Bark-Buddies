@@ -1,4 +1,4 @@
-﻿@model BarkBuddies.Models.Pet
+﻿@model BarkBuddies.Data.Entities.Pet
 
 @{
     ViewData["Title"] = "Edit";
@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        @*<form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="PetId" />
             <div class="form-group">
@@ -50,7 +50,7 @@
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
-        </form>
+        </form>*@
     </div>
 </div>
 

@@ -1,14 +1,9 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
-using Microsoft.EntityFrameworkCore;
+﻿using System.Text.Json.Serialization;
 
 
 public class Animal
 {
     [JsonPropertyName("id")]
-    [Key]
     public int PetId { get; set; }
 
     [JsonPropertyName("organization_id")]

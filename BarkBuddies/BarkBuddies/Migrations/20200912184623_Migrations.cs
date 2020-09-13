@@ -84,22 +84,6 @@ namespace BarkBuddies.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserProfile",
-                columns: table => new
-                {
-                    UserId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ZipCode = table.Column<int>(nullable: false),
-                    HasChildren = table.Column<bool>(nullable: false),
-                    HasCats = table.Column<bool>(nullable: false),
-                    PetId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserProfile", x => x.UserId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -267,9 +251,6 @@ namespace BarkBuddies.Migrations
 
             migrationBuilder.DropTable(
                 name: "Pets");
-
-            migrationBuilder.DropTable(
-                name: "UserProfile");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

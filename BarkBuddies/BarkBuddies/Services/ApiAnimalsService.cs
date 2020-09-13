@@ -1,4 +1,5 @@
-﻿using BarkBuddies.Models;
+﻿using BarkBuddies.Data.Entities;
+using BarkBuddies.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
