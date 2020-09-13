@@ -9,7 +9,7 @@ namespace BarkBuddies.Models
         [Key]
         public int PetId { get; set; }
 
-        [ForeignKey("UserProfileId")]
+        [ForeignKey("Id")]
         public int UserProfileId { get; set; }
         public string Name { get; set; }
         public Age Age { get; set; }
@@ -17,8 +17,8 @@ namespace BarkBuddies.Models
         public Size Size { get; set; }
         public string Breed { get; set; }
 
-        [ForeignKey("UserId")]
-        public int UserId { get; set; }
+        public virtual UserProfile UserProfile { get; set; }
+        public virtual string Id { get; set; }
     }
 
     public enum Size

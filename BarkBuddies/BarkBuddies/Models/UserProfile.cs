@@ -1,20 +1,17 @@
 
-using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace BarkBuddies.Models
 {
-    public class UserProfile
+    public class UserProfile : IdentityUser
     {
-        public int UserProfileId { get; set; }
+        public override string Id { get; set; }
         public int ZipCode { get; set; }
         public bool HasChildren { get; set; }
         public bool HasCats { get; set; }
         public Pet[] Pets { get; set; }
-
-        //[ForeignKey("PetId")]
-        //public int PetId { get; set; }
     }
 }
 

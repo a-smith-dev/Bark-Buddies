@@ -1,15 +1,10 @@
 ﻿using BarkBuddies.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BarkBuddies.Data
 {
-    public class AnimalContext : IdentityDbContext
+    public class AnimalContext : IdentityDbContext<UserProfile>
     {
         public AnimalContext(DbContextOptions<AnimalContext> options)
            : base(options)
