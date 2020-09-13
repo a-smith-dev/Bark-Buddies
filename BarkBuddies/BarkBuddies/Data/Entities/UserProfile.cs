@@ -1,10 +1,10 @@
+﻿using Microsoft.AspNetCore.Identity;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-using BarkBuddies.Data.Entities;
-using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
-
-namespace BarkBuddies.Models
+namespace BarkBuddies.Data.Entities
 {
     public class UserProfile
     {
@@ -15,4 +15,3 @@ namespace BarkBuddies.Models
         public IdentityUser User { get; set; }
     }
 }
-
