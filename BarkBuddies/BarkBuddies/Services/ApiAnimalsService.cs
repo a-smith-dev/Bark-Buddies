@@ -87,10 +87,12 @@ namespace BarkBuddies.Services
             queryString.Add("type", "dog");
             queryString.Add("location", $"{user.ZipCode}");
 
+            var count = 0;
             foreach (var pet in petList)
             {
-                queryString.Add("size", pet.Size.ToString("G"));
-                queryString.Add("age", pet.Age.ToString("G"));
+                queryString.Add($"size[{count}]", pet.Size.ToString("G"));
+                queryString.Add($"age[{count}]", pet.Age.ToString("G"));
+                count++;
                 //queryString.Add("size", GetSize(pet.Size, choice));
                 //queryString.Add("age", GetAge(pet.Age, choice));
             }
