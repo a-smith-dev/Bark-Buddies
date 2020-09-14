@@ -9,36 +9,65 @@
 <div>
     <h4>PetMatch</h4>
     <hr />
-    <table>
-        @foreach (var pet in Model)
-        {
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => pet.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => pet.Age)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => pet.Gender)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => pet.Size)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => pet.Breed)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => pet.Url)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => pet.OrganizationId)
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Age)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Gender)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Size)
+                </th>
+                
+                <th>
+                    @Html.DisplayNameFor(model => model.Url)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OrganizationId)
+                </th>
+
+                <th></th>
             </tr>
-        }
+        </thead>
+        <tbody>
+            @foreach (var pet in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => pet.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => pet.Age)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => pet.Gender)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => pet.Size)
+                    </td>
+                    
+                    <td>
+                        @Html.DisplayFor(modelItem => pet.Url)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => pet.OrganizationId)
+                    </td>
+                </tr>
+            }
+        </tbody>
     </table>
 </div>
 <div>
-   
-    <a asp-action="Index">Back to List</a>
+
+    <a asp-controller="Home" asp-action="Index">Home</a> |
+    
+        <a  asp-controller="Pets" asp-action="Index">Your Pets</a>
+    
+
 </div>
