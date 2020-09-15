@@ -45,9 +45,7 @@ namespace BarkBuddies.Controllers
 
         public IActionResult Create()
         {
-        
             return View();
-
         }
 
         [HttpPost]
