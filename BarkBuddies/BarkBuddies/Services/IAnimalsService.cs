@@ -13,7 +13,5 @@ namespace BarkBuddies.Services
     {
         Task<ApiResponse> Get();
         Task<ApiResponse> Get(IEnumerable<Pet> petList, UserProfile user);
-        Task<IActionResult> Create(Animal animal);
-
     }
 }

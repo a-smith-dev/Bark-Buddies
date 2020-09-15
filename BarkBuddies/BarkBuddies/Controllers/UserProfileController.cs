@@ -54,6 +54,7 @@ namespace BarkBuddies.Controllers
                     }
 
                     await _context.SaveChangesAsync();
+                    ViewBag.Success = "Successfully saved changes"; // add this to the Index view of UserProfile to show success
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -67,7 +68,7 @@ namespace BarkBuddies.Controllers
                     }
                 }
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "UserProfile");
             }
 
             return View(profile);

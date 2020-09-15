@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using BarkBuddies.Data;
 using BarkBuddies.Data.Entities;
 using BarkBuddies.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,20 +21,36 @@ namespace BarkBuddies.Controllers
             _context = context;
             _userManager = userManager;
         }
-       
-        public ActionResult Index()
-        {
-            return View();
-        }
 
-
-        public IActionResult Details()
+        public IActionResult Search()
         {
             var currentUser = GetCurrentUserAsync().Result;
-            var details = _service.Get(_context.Pets.Where(x => x.Owner.Equals(currentUser)).ToListAsync().Result, GetProfileAsync(currentUser.Id).Result).Result;
+            var details = _service.Get(_context.Pets
+                .Where(x => x.Owner.Equals(currentUser)).ToListAsync().Result, 
+                GetProfileAsync(currentUser.Id).Result).Result;
             var model = details.Animals.ToList();
             return View(model);
         }
+
+        // Save individual pet to database table PetMatch
+
+
+
+
+        // List out all pets in PetMatch table that match the ID of the user logged in
+
+
+
+        // Update PetMatch database table to confirm if all pets are still adoptable
+
+
+
+
+        // Adopt animal from PetMatch table to Pets table (link the user's ID to this new animal)
+        // // Troubleshoot: call the Pet controller, pass in the pet we want to adopt, delete the pet from this table
+
+
+
 
         private async Task<UserProfile> GetProfileAsync(string userId)
         {
