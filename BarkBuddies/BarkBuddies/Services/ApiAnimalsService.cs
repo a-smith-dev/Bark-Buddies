@@ -38,7 +38,6 @@ namespace BarkBuddies.Services
             string token = GetToken().Result;
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-
             return await _client.GetFromJsonAsync<ApiResponse>($"animals"); //append the user's query to this to narrow the search
         }
 
@@ -67,11 +66,6 @@ namespace BarkBuddies.Services
             return token;
         }
 
-        public Task<IActionResult> Create(Animal animal)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<ApiResponse> Get(IEnumerable<Pet> petList, UserProfile user) //, string choice
         {
             string token = GetToken().Result;
@@ -85,7 +79,15 @@ namespace BarkBuddies.Services
         {
             var queryString = HttpUtility.ParseQueryString(string.Empty);
             queryString.Add("type", "dog");
-            queryString.Add("location", $"{user.ZipCode}");
+            if (user != null)
+            {
+                if (user.ZipCode != null)
+                {
+                    queryString.Add("location", $"{user.ZipCode}");
+                }
+                queryString.Add("good_with_children", $"{user.HasChildren.ToString().ToLower()}");
+                queryString.Add("good_with_cats", $"{user.HasCats.ToString().ToLower()}");
+            }
 
             var count = 0;
             foreach (var pet in petList)
