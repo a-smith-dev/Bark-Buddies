@@ -34,7 +34,7 @@ namespace BarkBuddies.Services
             _petfinderDetails = petfinderDetails.Value;
         }
 
-        public async Task<ApiResponse> Get(string id) // return a specific animal
+        public async Task<ApiResponse> Get(string id)
         {
             string token = GetToken().Result;
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);

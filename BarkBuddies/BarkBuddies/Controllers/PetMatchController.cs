@@ -39,12 +39,11 @@ namespace BarkBuddies.Controllers
             return View(model);
         }
 
-        // Save individual pet to database table PetMatch -- DONE
         public async Task<IActionResult> SavePet(string id)
         {
             var currentUser = GetCurrentUserAsync().Result;
             var pet = _service.Get(id).Result.Animal;
-            if (pet != null)
+            if (pet != null && _context.PetMatch.Where(x => x.PetId == pet.PetId).Count() == 0)
             {
                 var petAge = Age.baby;
                 Enum.TryParse(pet.Age, true, out petAge);
@@ -61,6 +60,7 @@ namespace BarkBuddies.Controllers
                     Status = "adoptable",
                     User = currentUser});
                 await _context.SaveChangesAsync();
+                ViewBag.Success = $"{pet.Name} was successfully saved to list!";
             }
             
             return RedirectToAction("Search");
