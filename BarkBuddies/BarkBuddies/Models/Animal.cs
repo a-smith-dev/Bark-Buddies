@@ -12,8 +12,6 @@ public class Animal
     public string Type { get; set; }
     public string Species { get; set; }
     public string Breed { get; set; }
-    //public Breeds Breeds { get; set; }
-    //public Colors Colors { get; set; }
     public string Age { get; set; }
     public string Gender { get; set; }
     public string Size { get; set; }

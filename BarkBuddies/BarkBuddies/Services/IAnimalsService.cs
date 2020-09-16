@@ -11,7 +11,7 @@ namespace BarkBuddies.Services
 {
     public interface IAnimalsService
     {
-        Task<ApiResponse> Get();
+        Task<ApiResponse> Get(string id);
         Task<ApiResponse> Get(IEnumerable<Pet> petList, UserProfile user);
     }
 }

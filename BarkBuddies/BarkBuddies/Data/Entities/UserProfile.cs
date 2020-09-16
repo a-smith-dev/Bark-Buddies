@@ -15,12 +15,12 @@ namespace BarkBuddies.Data.Entities
         public IdentityUser User { get; set; }
     }
 
-    //public enum SizeChoice
-    //{
-    //    smaller = 0,
+    public enum SizeChoice
+    {
+        smaller = 0,
 
-    //    same,
+        same,
 
-    //    bigger
-    //}
+        bigger
+    }
 }

@@ -14,6 +14,7 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -33,12 +34,13 @@ namespace BarkBuddies.Services
             _petfinderDetails = petfinderDetails.Value;
         }
 
-        public async Task<ApiResponse> Get()
+        public async Task<ApiResponse> Get(string id)
         {
             string token = GetToken().Result;
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            return await _client.GetFromJsonAsync<ApiResponse>($"animals"); //append the user's query to this to narrow the search
+            var options = new JsonSerializerOptions();
+            options.PropertyNameCaseInsensitive = true;
+            return await _client.GetFromJsonAsync<ApiResponse>($"animals/{id}", options);
         }
 
         private async Task<string> GetToken()

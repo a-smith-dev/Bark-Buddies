@@ -4,6 +4,10 @@
     ViewData["Title"] = "Details";
 }
 
+@if (ViewBag.Success != null)
+{
+    <p>@ViewBag.Success</p>
+}
 <h1>View</h1>
 
 <div>
@@ -38,27 +42,30 @@
         <tbody>
             @foreach (var pet in Model)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => pet.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => pet.Age)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => pet.Gender)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => pet.Size)
-                    </td>
-                    
-                    <td>
-                        @Html.DisplayFor(modelItem => pet.Url)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => pet.OrganizationId)
-                    </td>
-                </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => pet.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => pet.Age)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => pet.Gender)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => pet.Size)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => pet.Url)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => pet.OrganizationId)
+                </td>
+                <td>
+                    <a asp-controller="PetMatch" asp-action="SavePet" asp-route-id="@pet.PetId">Save pet to wish list</a>
+                </td>
+            </tr>
             }
         </tbody>
     </table>

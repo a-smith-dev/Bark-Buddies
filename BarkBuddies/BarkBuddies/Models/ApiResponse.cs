@@ -11,6 +11,7 @@ namespace BarkBuddies.Models
     {
         public Animal[] Animals { get; set; }
         public Pagination Pagination { get; set; }
+        public Animal Animal { get; set; }
     }
 }
 
