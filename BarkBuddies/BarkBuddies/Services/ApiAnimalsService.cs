@@ -91,6 +91,7 @@ namespace BarkBuddies.Services
         {
             var queryString = HttpUtility.ParseQueryString(string.Empty);
             queryString.Add("type", "dog");
+            queryString.Add("good_with_dogs", "true");
             if (user != null)
             {
                 if (user.ZipCode != null)
@@ -99,6 +100,7 @@ namespace BarkBuddies.Services
                 }
                 queryString.Add("good_with_children", $"{user.HasChildren.ToString().ToLower()}");
                 queryString.Add("good_with_cats", $"{user.HasCats.ToString().ToLower()}");
+               
             }
 
             var count = 0;

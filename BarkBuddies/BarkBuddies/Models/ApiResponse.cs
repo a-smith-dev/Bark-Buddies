@@ -31,13 +31,13 @@ public class Next
     public string Href { get; set; }
 }
 
-public class Breeds
-{
-    public string Primary { get; set; }
-    public object Secondary { get; set; }
-    public bool Mixed { get; set; }
-    public bool Unknown { get; set; }
-}
+//public class Breeds
+//{
+//    public string Primary { get; set; }
+//    public object Secondary { get; set; }
+//    public bool Mixed { get; set; }
+//    public bool Unknown { get; set; }
+//}
 
 public class Colors
 {
