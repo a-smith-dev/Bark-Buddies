@@ -11,11 +11,31 @@ public class Animal
     public string Url { get; set; }
     public string Type { get; set; }
     public string Species { get; set; }
-    public string Breed { get; set; }
+    public string Breed { get; set; } //need to get rid of this once petMatch controller updated
+    public Breeds Breeds{ get; set; }
     public string Age { get; set; }
     public string Gender { get; set; }
     public string Size { get; set; }
     public string Name { get; set; }
+    public Photos[] Photos { get; set; }
+}
+
+public class Breeds
+{
+    public string Primary { get; set; }
+    public string Secondary { get; set; }
+    public bool Mixed { get; set; }
+    public bool Unknown { get; set; }
+
+}
+
+public class Photos
+{
+    public string Small { get; set; }
+    public string Medium { get; set; }
+    public string Large { get; set; }
+    public string Full { get; set; }
+
 }
 //[NotMapped]
 //    public object Coat { get; set; }
