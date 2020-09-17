@@ -26,6 +26,7 @@ namespace BarkBuddies.Services
         private readonly IMemoryCache _cache;
         private readonly PetFinderApiCredentials _petfinderDetails;
         private const string CacheKey = "TokenCacheKey";
+        private readonly JsonSerializerOptions OPTIONS = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true};
 
         public ApiAnimalsService(HttpClient client, IMemoryCache cache, IOptions<PetFinderApiCredentials> petfinderDetails)
         {
@@ -38,9 +39,18 @@ namespace BarkBuddies.Services
         {
             string token = GetToken().Result;
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var options = new JsonSerializerOptions();
-            options.PropertyNameCaseInsensitive = true;
-            return await _client.GetFromJsonAsync<ApiResponse>($"animals/{id}", options);
+
+            ApiResponse response = null;
+            try
+            {
+                response = await _client.GetFromJsonAsync<ApiResponse>($"animals/{id}", OPTIONS);
+            }
+            catch (Exception)
+            {
+                return response;
+            }
+
+            return response;
         }
 
         private async Task<string> GetToken()

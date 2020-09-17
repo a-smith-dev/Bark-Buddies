@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BarkBuddies.Data;
@@ -26,7 +27,24 @@ namespace BarkBuddies.Controllers
         public async Task<IActionResult> Index()
         {
             var currentUser = GetCurrentUserAsync().Result;
-            return View(await _context.PetMatch.Where(x => x.User.Equals(currentUser)).ToListAsync());
+            var petMatchList = await _context.PetMatch.Where(x => x.User.Equals(currentUser)).ToListAsync();
+            foreach (var pet in petMatchList)
+            {
+                if (pet.Status != "adoptable" && _service.Get(pet.PetId.ToString()).Result == null)
+                {
+                    using (var db = _context)
+                    {
+                        var result = db.PetMatch.SingleOrDefaultAsync(x => x.PetId == pet.PetId);
+                        if (result != null)
+                        {
+                            result.Result.Status = "Not Adoptable";
+                            await db.SaveChangesAsync();
+                        }
+                    }
+                    TempData["NotAdoptable"] += $"{pet.Name} has been adopted and updated in the below list. \n";
+                }
+            }
+            return View(petMatchList);
         }
 
         public IActionResult Search()
@@ -67,18 +85,49 @@ namespace BarkBuddies.Controllers
         }
 
 
-        // TODO - List out all pets in PetMatch table that match the ID of the user logged in
+        public async Task<IActionResult> Adopt(string id)
+        {
+            var currentUser = GetCurrentUserAsync().Result;
+            var pet = _service.Get(id).Result.Animal;
+            if (pet != null)
+            {
+                var petAge = Age.baby;
+                Enum.TryParse(pet.Age, true, out petAge);
+                var petSize = Size.small;
+                Enum.TryParse(pet.Size, true, out petSize);
 
+                _context.Add(new Pet
+                {
+                    Name = pet.Name,
+                    Age = petAge,
+                    Gender = pet.Gender,
+                    Size = petSize,
+                    Breed = pet.Breed,
+                    Owner = currentUser
+                });
+                await _context.SaveChangesAsync();
+                ViewData["Adopted"] = $"Congratulations! You've adopted {pet.Name}!";
 
+                var petMatchList = _context.PetMatch.Where(x => x.PetId == pet.PetId).ToListAsync().Result;
+                if (petMatchList.Count() != 0)
+                {
+                    using (var db = _context)
+                    {
+                        for (int i = 0; i < petMatchList.Count; i++)
+                        {
+                            var result = db.PetMatch.SingleOrDefaultAsync(x => x.PetId == petMatchList[i].PetId);
+                            if (result != null)
+                            {
+                                result.Result.Status = "Not Adoptable";
+                            }
+                        }
+                        await db.SaveChangesAsync();
+                    }
+                }
+            }
 
-        // TODO - Update PetMatch database table to confirm if all pets are still adoptable
-
-
-
-
-        // TODO - Adopt animal from PetMatch table to Pets table (link the user's ID to this new animal)
-        // // Troubleshoot: call the Pet controller, pass in the pet we want to adopt, delete the pet from this table
-
+            return RedirectToAction("Index");
+        }
 
 
 
