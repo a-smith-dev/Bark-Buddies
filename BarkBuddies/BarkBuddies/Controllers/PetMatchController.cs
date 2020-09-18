@@ -56,7 +56,7 @@ namespace BarkBuddies.Controllers
             var model = details.Animals.ToList();
             return View(model);
         }
-
+       
         public async Task<IActionResult> SavePet(string id)
         {
             var currentUser = GetCurrentUserAsync().Result;
@@ -80,10 +80,8 @@ namespace BarkBuddies.Controllers
                 await _context.SaveChangesAsync();
                 ViewBag.Success = $"{pet.Name} was successfully saved to list!";
             }
-            
             return RedirectToAction("Search");
         }
-
 
         public async Task<IActionResult> Adopt(string id)
         {
@@ -128,8 +126,6 @@ namespace BarkBuddies.Controllers
 
             return RedirectToAction("Index");
         }
-
-
 
         private async Task<UserProfile> GetProfileAsync(string userId)
         {
