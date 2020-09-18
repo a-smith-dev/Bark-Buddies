@@ -88,9 +88,17 @@ namespace BarkBuddies.Services
                 {
                     queryString.Add("location", $"{user.ZipCode}");
                 }
-                queryString.Add("good_with_children", $"{user.HasChildren.ToString().ToLower()}");
-                queryString.Add("good_with_cats", $"{user.HasCats.ToString().ToLower()}");
-               
+                if (user.HasChildren)
+                {
+                    queryString.Add("good_with_children", "true");
+                }
+                if (user.HasCats)
+                {
+                    queryString.Add("good_with_cats", "true");
+                }
+                //queryString.Add("good_with_children", $"{user.HasChildren.ToString().ToLower()}");
+                //queryString.Add("good_with_cats", $"{user.HasCats.ToString().ToLower()}");
+
             }
 
             var count = 0;
