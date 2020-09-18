@@ -27,6 +27,16 @@ namespace BarkBuddies.Controllers
             var result = await GetProfileAsync(currentUser.Id);
             return View(result);
         }
+        //public async Task<IActionResult> Create([Bind("Name,Age,Gender,Size,Breed")] Pet pet)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var currentUser = await GetCurrentUserAsync();
+        //        var thisPet = pet;
+        //        thisPet.Owner = currentUser;
+        //      
+        //    }
+        //    return View(pet);
 
         [Authorize]
         [HttpPost]
@@ -39,22 +49,21 @@ namespace BarkBuddies.Controllers
                 {
                     var currentUser = await GetCurrentUserAsync();
                     var currentProfile = await GetProfileAsync(currentUser.Id);
-                    
+
                     if (currentProfile != null)
                     {
                         currentProfile.ZipCode = profile.ZipCode;
                         currentProfile.HasCats = profile.HasCats;
                         currentProfile.HasChildren = profile.HasChildren;
-                        _context.Update(currentProfile);
+                        _context.Update(currentProfile);                        
                     }
                     else
                     {
                         profile.User = currentUser;
                         _context.Add(profile);
                     }
-
-                    await _context.SaveChangesAsync();
-                    ViewBag.Success = "Successfully saved changes"; // add this to the Index view of UserProfile to show success
+                        await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "Save Successful";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -73,7 +82,7 @@ namespace BarkBuddies.Controllers
 
             return View(profile);
         }
-
+   
         private async Task<UserProfile> GetProfileAsync(string userId)
         {
             return await _context.UserProfiles.FirstOrDefaultAsync(x => x.User.Id == userId);

@@ -38,7 +38,7 @@ namespace BarkBuddies.Controllers
             var model = details.Animals.ToList();
             return View(model);
         }
-
+       
         public async Task<IActionResult> SavePet(string id)
         {
             var currentUser = GetCurrentUserAsync().Result;
@@ -66,21 +66,12 @@ namespace BarkBuddies.Controllers
             return RedirectToAction("Search");
         }
 
-
         // TODO - List out all pets in PetMatch table that match the ID of the user logged in
-
-
 
         // TODO - Update PetMatch database table to confirm if all pets are still adoptable
 
-
-
-
         // TODO - Adopt animal from PetMatch table to Pets table (link the user's ID to this new animal)
         // // Troubleshoot: call the Pet controller, pass in the pet we want to adopt, delete the pet from this table
-
-
-
 
         private async Task<UserProfile> GetProfileAsync(string userId)
         {
