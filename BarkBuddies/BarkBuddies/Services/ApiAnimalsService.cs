@@ -1,18 +1,13 @@
 ﻿using BarkBuddies.Data.Entities;
 using BarkBuddies.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
-using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -38,9 +33,19 @@ namespace BarkBuddies.Services
         {
             string token = GetToken().Result;
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var options = new JsonSerializerOptions();
-            options.PropertyNameCaseInsensitive = true;
-            return await _client.GetFromJsonAsync<ApiResponse>($"animals/{id}", options);
+            var jsonOptions = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
+
+            ApiResponse response = null;
+            try
+            {
+                response = await _client.GetFromJsonAsync<ApiResponse>($"animals/{id}", jsonOptions);
+            }
+            catch (Exception)
+            {
+                return response;
+            }
+
+            return response;
         }
 
         private async Task<string> GetToken()
@@ -68,16 +73,15 @@ namespace BarkBuddies.Services
             return token;
         }
 
-        public async Task<ApiResponse> Get(IEnumerable<Pet> petList, UserProfile user) //, string choice
+        public async Task<ApiResponse> Get(IEnumerable<Pet> petList, UserProfile user)
         {
             string token = GetToken().Result;
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            string query = GetQuery(petList, user); /*, string choice*/
-
+            string query = GetQuery(petList, user);
             return await _client.GetFromJsonAsync<ApiResponse>($"animals?{query}");
         }
 
-        private string GetQuery(IEnumerable<Pet> petList, UserProfile user)  /*, string choice*/
+        private string GetQuery(IEnumerable<Pet> petList, UserProfile user)
         {
             var queryString = HttpUtility.ParseQueryString(string.Empty);
             queryString.Add("type", "dog");
@@ -96,33 +100,28 @@ namespace BarkBuddies.Services
                 {
                     queryString.Add("good_with_cats", "true");
                 }
-                //queryString.Add("good_with_children", $"{user.HasChildren.ToString().ToLower()}");
-                //queryString.Add("good_with_cats", $"{user.HasCats.ToString().ToLower()}");
-
             }
 
             var count = 0;
             foreach (var pet in petList)
             {
-                queryString.Add($"size[{count}]", pet.Size.ToString("G"));
-                queryString.Add($"age[{count}]", pet.Age.ToString("G"));
+                queryString.Add($"size[{count}]", GetSize(pet.Size, user.SizeChoice));
+                queryString.Add($"age[{count}]", GetAge(pet.Age, user.AgeChoice));
                 count++;
-                //queryString.Add("size", GetSize(pet.Size, choice));
-                //queryString.Add("age", GetAge(pet.Age, choice));
             }
 
             return queryString.ToString();
         }
 
-        private string GetSize(Size size, string choice)
+        private string GetSize(Size size, SizeChoice choice)
         {
             switch (choice)
             {
-                case "smaller":
+                case SizeChoice.smaller:
                     if (size == Size.small)
                         return size.ToString("G");
                     return DecreaseSize(size).ToString("G");
-                case "same":
+                case SizeChoice.same:
                     return size.ToString("G");
                 default:
                     if (size == Size.xlarge)
@@ -134,29 +133,28 @@ namespace BarkBuddies.Services
         private Size IncreaseSize(Size size)
         {
             var newSize = 0;
-            var sizeInt = size.ToString("D");
-            int.TryParse(sizeInt, out newSize);
+            int.TryParse(size.ToString("D"), out newSize);
             return (Size)(newSize + 1);
         }
 
         private Size DecreaseSize(Size size)
         {
             var newSize = 1;
-            var sizeInt = size.ToString("D");
-            int.TryParse(sizeInt, out newSize);
+            int.TryParse(size.ToString("D"), out newSize);
             return (Size)(newSize - 1);
         }
 
-        private string GetAge(Age age, string choice)
+        private string GetAge(Age age, AgeChoice choice)
         {
             switch (choice)
             {
-                case "younger":
+                case AgeChoice.younger:
                     if (age == Age.baby)
                         return age.ToString("G");
                     return DecreaseAge(age).ToString("G");
-                case "same":
+                case AgeChoice.same:
                     return age.ToString("G");
+                case AgeChoice.older:
                 default:
                     if (age == Age.senior)
                         return age.ToString("G");
@@ -167,18 +165,15 @@ namespace BarkBuddies.Services
         private Age IncreaseAge(Age age)
         {
             var newAge = 0;
-            var sizeInt = age.ToString("D");
-            int.TryParse(sizeInt, out newAge);
+            int.TryParse(age.ToString("D"), out newAge);
             return (Age)(newAge + 1);
         }
 
         private Age DecreaseAge(Age age)
         {
             var newAge = 1;
-            var sizeInt = age.ToString("D");
-            int.TryParse(sizeInt, out newAge);
+            int.TryParse(age.ToString("D"), out newAge);
             return (Age)(newAge - 1);
         }
-
     }
 }

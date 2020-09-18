@@ -13,7 +13,6 @@ namespace BarkBuddies.Controllers
     {
         private readonly AnimalContext _context;
         private readonly UserManager<IdentityUser> _userManager;
-
         public PetController(AnimalContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
@@ -21,11 +20,16 @@ namespace BarkBuddies.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var currentUser = GetCurrentUserAsync().Result;
-           
-            return View(await _context.Pets.Where(x => x.Owner.Equals(currentUser)).ToListAsync());
+            if (User.Identity.IsAuthenticated)
+            {
+                var currentUser = GetCurrentUserAsync().Result;
+                return View(await _context.Pets.Where(x => x.Owner.Equals(currentUser)).ToListAsync());
+            }
+            else
+            {
+                return RedirectToAction("Index", "UserProfile");
+            }
         }
-
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -44,26 +48,27 @@ namespace BarkBuddies.Controllers
         }
 
         public IActionResult Create()
-        {
-            return View();
+        {         
+            {
+                return View();              
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name,Age,Gender,Size,Breed")] Pet pet)
-        {
-             if (ModelState.IsValid)
-            {
-                var currentUser = await GetCurrentUserAsync();
-                var thisPet = pet;
-                thisPet.Owner = currentUser;
-                _context.Add(thisPet);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(pet);
+        {           
+                if (ModelState.IsValid)
+                {
+                    var currentUser = await GetCurrentUserAsync();
+                    var thisPet = pet;
+                    thisPet.Owner = currentUser;
+                    _context.Add(thisPet);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(pet);           
         }
-
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -78,8 +83,7 @@ namespace BarkBuddies.Controllers
             }
             return View(pet);
         }
-
-    
+ 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("PetId,Name,Age,Gender,Size,Breed")] Pet pet)
@@ -111,7 +115,6 @@ namespace BarkBuddies.Controllers
             }
             return View(pet);
         }
-
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

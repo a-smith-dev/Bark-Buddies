@@ -20,7 +20,6 @@ namespace BarkBuddies.Data.Entities
 
     public enum SizeChoice
     {
-
         [Display(Name = "Smaller")]
         smaller = 0,
         [Display(Name = "Same Size")]
@@ -28,6 +27,7 @@ namespace BarkBuddies.Data.Entities
         [Display(Name = "Larger")]
         bigger
     }
+
     public enum AgeChoice
     {
         [Display(Name = "Younger")]

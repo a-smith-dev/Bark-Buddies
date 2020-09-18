@@ -16,6 +16,7 @@ public class Animal
     public string Age { get; set; }
     public string Gender { get; set; }
     public string Size { get; set; }
+
     public string Name { get; set; }
     public Photos[] Photos { get; set; }
 }
@@ -26,7 +27,6 @@ public class Breeds
     public string Secondary { get; set; }
     public bool Mixed { get; set; }
     public bool Unknown { get; set; }
-
 }
 
 public class Photos
