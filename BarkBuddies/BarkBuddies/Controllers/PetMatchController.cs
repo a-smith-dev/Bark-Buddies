@@ -16,6 +16,8 @@ namespace BarkBuddies.Controllers
         private readonly IAnimalsService _service;
         private readonly AnimalContext _context;
         private readonly UserManager<IdentityUser> _userManager;
+        private const string Adoptable = "Adoptable";
+        private const string NotAdoptable = "Not Adoptable";
 
         public PetMatchController(IAnimalsService service, AnimalContext context, UserManager<IdentityUser> userManager)
         {
@@ -30,14 +32,14 @@ namespace BarkBuddies.Controllers
             var petMatchList = await _context.PetMatch.Where(x => x.User.Equals(currentUser)).ToListAsync();
             foreach (var pet in petMatchList)
             {
-                if (pet.Status != "adoptable" && _service.Get(pet.PetId.ToString()).Result == null)
+                if (pet.Status != Adoptable && _service.Get(pet.PetId.ToString()).Result == null)
                 {
                     using (var db = _context)
                     {
                         var result = db.PetMatch.SingleOrDefaultAsync(x => x.PetId == pet.PetId);
                         if (result != null)
                         {
-                            result.Result.Status = "Not Adoptable";
+                            result.Result.Status = NotAdoptable;
                             await db.SaveChangesAsync();
                         }
                     }
@@ -75,7 +77,7 @@ namespace BarkBuddies.Controllers
                     Gender = pet.Gender,
                     Size = petSize,
                     Breed = pet.Breeds.Primary,
-                    Status = "adoptable",
+                    Status = Adoptable,
                     Url = pet.Url,
                     User = currentUser});
                 await _context.SaveChangesAsync();
@@ -87,44 +89,86 @@ namespace BarkBuddies.Controllers
         public async Task<IActionResult> Adopt(string id)
         {
             var currentUser = GetCurrentUserAsync().Result;
-            var pet = _service.Get(id).Result.Animal;
-            if (pet != null)
+            Animal pet;
+            try
             {
-                var petAge = Age.baby;
-                Enum.TryParse(pet.Age, true, out petAge);
-                var petSize = Size.small;
-                Enum.TryParse(pet.Size, true, out petSize);
-
-                _context.Add(new Pet
+                pet = _service.Get(id).Result.Animal;
+                if (_context.Pets.Where(x => x.Name == pet.Name && x.Breed == pet.Breeds.Primary).Count() == 0)
                 {
-                    Name = pet.Name,
-                    Age = petAge,
-                    Gender = pet.Gender,
-                    Size = petSize,
-                    Breed = pet.Breed,
-                    Owner = currentUser
-                });
-                await _context.SaveChangesAsync();
-                ViewData["Adopted"] = $"Congratulations! You've adopted {pet.Name}!";
+                    var petAge = Age.baby;
+                    Enum.TryParse(pet.Age, true, out petAge);
+                    var petSize = Size.small;
+                    Enum.TryParse(pet.Size, true, out petSize);
 
-                var petMatchList = _context.PetMatch.Where(x => x.PetId == pet.PetId).ToListAsync().Result;
-                if (petMatchList.Count() != 0)
-                {
-                    using (var db = _context)
+                    _context.Add(new Pet
                     {
-                        for (int i = 0; i < petMatchList.Count; i++)
+                        Name = pet.Name,
+                        Age = petAge,
+                        Gender = pet.Gender,
+                        Size = petSize,
+                        Breed = pet.Breeds.Primary,
+                        Owner = currentUser
+                    });
+                    await _context.SaveChangesAsync();
+                    ViewData["Adopted"] = $"Congratulations! You've adopted {pet.Name}!";
+
+                    var petMatchList = _context.PetMatch.Where(x => x.PetId == pet.PetId).ToListAsync().Result;
+                    if (petMatchList.Count() != 0)
+                    {
+                        using (var db = _context)
                         {
-                            var result = db.PetMatch.SingleOrDefaultAsync(x => x.PetId == petMatchList[i].PetId);
-                            if (result != null)
+                            for (int i = 0; i < petMatchList.Count; i++)
                             {
-                                result.Result.Status = "Not Adoptable";
+                                var result = db.PetMatch.SingleOrDefaultAsync(x => x.PetId == petMatchList[i].PetId);
+                                if (result != null)
+                                {
+                                    result.Result.Status = NotAdoptable;
+                                }
                             }
+                            await db.SaveChangesAsync();
                         }
-                        await db.SaveChangesAsync();
                     }
                 }
+                return RedirectToAction("Index");
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index");
+            }
+        }
+
+        public async Task<IActionResult> Delete(string id)
+        {
+            int tempId;
+            int? petId = int.TryParse(id, out tempId) ? tempId : (int?)null;
+
+            if (petId == null)
+            {
+                return NotFound();
             }
 
+            var pet = await _context.PetMatch
+                .FirstOrDefaultAsync(m => m.PetId == petId);
+
+            if (pet == null)
+            {
+                return NotFound();
+            }
+
+            return View(pet);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConfirmDelete(string id)
+        {
+            var currentUser = GetCurrentUserAsync().Result;
+            var petId = 0;
+            int.TryParse(id, out petId);
+            var pet = await _context.PetMatch
+                .Where(x=> x.PetId == petId && x.User == currentUser).FirstOrDefaultAsync();
+            _context.PetMatch.Remove(pet);
+            await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
