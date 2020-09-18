@@ -16,7 +16,7 @@ public class Animal
     public string Age { get; set; }
     public string Gender { get; set; }
     public string Size { get; set; }
-
+    public string Status { get; set; }
     public string Name { get; set; }
     public Photos[] Photos { get; set; }
 }
@@ -43,11 +43,10 @@ public class Photos
 //    //public Environment Environment { get; set; }
 //    [NotMapped]
 //    //public string[] Tags { get; set; }
-
 //    //public string Description { get; set; }
 //    //public Photo[] Photos { get; set; }
 //    //public Video[] Videos { get; set; }
-//    //public string Status { get; set; }
+
 
 //    //[JsonPropertyName("published_at")]
 //    //public DateTime PublishedAt { get; set; }
