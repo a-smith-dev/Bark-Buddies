@@ -11,7 +11,7 @@ public class Animal
     public string Url { get; set; }
     public string Type { get; set; }
     public string Species { get; set; }
-    public string Breed { get; set; } //need to get rid of this once petMatch controller updated
+    public string Breed { get; set; }
     public Breeds Breeds{ get; set; }
     public string Age { get; set; }
     public string Gender { get; set; }

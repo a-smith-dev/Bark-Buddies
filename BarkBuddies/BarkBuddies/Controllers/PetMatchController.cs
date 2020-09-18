@@ -41,7 +41,7 @@ namespace BarkBuddies.Controllers
                             await db.SaveChangesAsync();
                         }
                     }
-                    TempData["NotAdoptable"] += $"{pet.Name} has been adopted and updated in the below list. \n";
+                    TempData["NotAdoptable"] += $"{pet.Name} has been adopted and updated below. \n";
                 }
             }
             return View(petMatchList);
@@ -74,8 +74,9 @@ namespace BarkBuddies.Controllers
                     Age = petAge,
                     Gender = pet.Gender,
                     Size = petSize,
-                    Breed = pet.Breed,
+                    Breed = pet.Breeds.Primary,
                     Status = "adoptable",
+                    Url = pet.Url,
                     User = currentUser});
                 await _context.SaveChangesAsync();
                 ViewBag.Success = $"{pet.Name} was successfully saved to list!";
