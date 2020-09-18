@@ -35,7 +35,7 @@ namespace BarkBuddies.Services
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var jsonOptions = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
 
-        ApiResponse response = null;
+            ApiResponse response = null;
             try
             {
                 response = await _client.GetFromJsonAsync<ApiResponse>($"animals/{id}", jsonOptions);
@@ -78,7 +78,6 @@ namespace BarkBuddies.Services
             string token = GetToken().Result;
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             string query = GetQuery(petList, user);
-
             return await _client.GetFromJsonAsync<ApiResponse>($"animals?{query}");
         }
 

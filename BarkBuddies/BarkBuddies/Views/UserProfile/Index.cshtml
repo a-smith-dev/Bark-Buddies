@@ -33,7 +33,7 @@
                     <input class="form-check-input" asp-for="HasCats" /> Household has cats
                 </label>
 
-                @* <div>
+                <div>
                         <br />
                         Compared to your current pet(s), are you looking for:
                     </div>
@@ -52,7 +52,7 @@
                                 asp-items="Html.GetEnumSelectList<AgeChoice>()">
                         </select>
                         <span asp-validation-for="AgeChoice" class="text-danger"></span>
-                    </div>*@
+                    </div>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

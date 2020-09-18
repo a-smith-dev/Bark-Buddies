@@ -48,15 +48,24 @@
             @foreach (var pet in Model)
             {
             <tr>
-                @if (pet.Photos != null)
+                @if (pet.Photos.Count() < 1)
                 {
                     <td>
-                        @{
-                            var img = pet.Photos[0].Small;
-                        }
-                        <img src=@img width=@img .100 />
+                        <p>No photo</p>
                     </td>
+
                 }
+                else
+                {
+                <td>
+                    @{
+                        var img = pet.Photos[0].Small;
+                    }
+                    <img src=@img width=@img.100 />
+                </td>
+                }
+               
+
 
                 <td>
                     @Html.DisplayFor(modelItem => pet.Name)
@@ -74,7 +83,7 @@
                     @Html.DisplayFor(modelItem => pet.Breeds.Primary)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => pet.Url)
+                    <a href="@Html.DisplayFor(modelItem => pet.Url)" target="_blank">View Petfinder Profile</a>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => pet.OrganizationId)
