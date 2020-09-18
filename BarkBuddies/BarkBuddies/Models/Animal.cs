@@ -26,7 +26,6 @@ public class Breeds
     public string Secondary { get; set; }
     public bool Mixed { get; set; }
     public bool Unknown { get; set; }
-
 }
 
 public class Photos
