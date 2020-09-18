@@ -1,4 +1,5 @@
-﻿@model BarkBuddies.Data.Entities.UserProfile
+﻿@using BarkBuddies.Data.Entities;
+@model BarkBuddies.Data.Entities.UserProfile
 
 @{
     ViewData["Title"] = "Edit";
@@ -6,6 +7,10 @@
 
 
 
+@if (ViewBag.Success != null)
+{
+    <p>@ViewBag.Success</p>
+}
 <h4>User Profile</h4>
 <hr />
 <div class="row">
@@ -20,13 +25,34 @@
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="HasChildren" /> @Html.DisplayNameFor(model => model.HasChildren)
+                    <input class="form-check-input" asp-for="HasChildren" /> Household has children
                 </label>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="HasCats" /> @Html.DisplayNameFor(model => model.HasCats)
+                    <input class="form-check-input" asp-for="HasCats" /> Household has cats
                 </label>
+
+                @* <div>
+                        <br />
+                        Compared to your current pet(s), are you looking for:
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="SizeChoice" class="control-label">Size</label>
+                        <select asp-for="SizeChoice"
+                                class="form-control"
+                                asp-items="Html.GetEnumSelectList<SizeChoice>()">
+                        </select>
+                        <span asp-validation-for="SizeChoice" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AgeChoice" class="control-label">Age</label>
+                        <select asp-for="AgeChoice"
+                                class="form-control"
+                                asp-items="Html.GetEnumSelectList<AgeChoice>()">
+                        </select>
+                        <span asp-validation-for="AgeChoice" class="text-danger"></span>
+                    </div>*@
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
@@ -36,7 +62,6 @@
                     </div>
             </div>
         </form>
-        <br />
     </div>
 </div>
 <div>

@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "mssql2": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/barkbuddies/databases/BarkBuddies",
+      "type": "mssql.azure",
+      "connectionId": "OurDatabase",
+      "secretStore": "AzureAppSettings"
+    }
+  }
+}

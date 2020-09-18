@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using BarkBuddies.Models;
+using System;
+using System.Collections.Generic;
 
 namespace BarkBuddies.Controllers
 {
@@ -37,6 +40,16 @@ namespace BarkBuddies.Controllers
         //      
         //    }
         //    return View(pet);
+
+        public async Task<IActionResult> IndexTuple()
+        {  
+            var currentUser = await GetCurrentUserAsync();
+            var result = await GetProfileAsync(currentUser.Id);
+            var petList = await _context.Pets.Where(x => x.Owner.Equals(currentUser)).ToListAsync();
+            var model = new Tuple<UserProfile, List<Pet>>(result, petList);
+            return View(model);
+        }
+
 
         [Authorize]
         [HttpPost]

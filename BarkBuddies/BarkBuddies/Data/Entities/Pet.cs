@@ -11,7 +11,6 @@ namespace BarkBuddies.Data.Entities
         public string Gender { get; set; }
         public Size Size { get; set; }
         public string Breed { get; set; }
-
         public IdentityUser Owner { get; set; }
     }
 
