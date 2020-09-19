@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using BarkBuddies.Models;
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Razor.Language;
 
 namespace BarkBuddies.Controllers
 {
@@ -54,7 +55,7 @@ namespace BarkBuddies.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit([Bind("ZipCode,HasChildren,HasCats")] UserProfile profile)
+        public async Task<IActionResult> Edit([Bind("ZipCode,HasChildren,HasCats,SizeChoice,AgeChoice")] UserProfile profile)
         {
             if (ModelState.IsValid)
             {
@@ -62,12 +63,14 @@ namespace BarkBuddies.Controllers
                 {
                     var currentUser = await GetCurrentUserAsync();
                     var currentProfile = await GetProfileAsync(currentUser.Id);
-
+   
                     if (currentProfile != null)
                     {
                         currentProfile.ZipCode = profile.ZipCode;
                         currentProfile.HasCats = profile.HasCats;
                         currentProfile.HasChildren = profile.HasChildren;
+                        currentProfile.SizeChoice = profile.SizeChoice;
+                        currentProfile.AgeChoice = profile.AgeChoice;
                         _context.Update(currentProfile);                        
                     }
                     else
@@ -92,8 +95,9 @@ namespace BarkBuddies.Controllers
 
                 return RedirectToAction("Index", "UserProfile");
             }
-
-            return View(profile);
+            var petList = await _context.Pets.Where(x => x.Owner.Equals(profile)).ToListAsync();
+            var model = new Tuple<UserProfile, List<Pet>>(profile, petList);
+            return View(model);
         }
    
         private async Task<UserProfile> GetProfileAsync(string userId)
