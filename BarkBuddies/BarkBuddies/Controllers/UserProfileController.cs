@@ -24,13 +24,13 @@ namespace BarkBuddies.Controllers
             _userManager = userManager;
         }
         
-        [Authorize]
-        public async Task<IActionResult> Index()
-        {
-            var currentUser = await GetCurrentUserAsync();
-            var result = await GetProfileAsync(currentUser.Id);
-            return View(result);
-        }
+       
+        //public async Task<IActionResult> Index()
+        //{
+        //    var currentUser = await GetCurrentUserAsync();
+        //    var result = await GetProfileAsync(currentUser.Id);
+        //    return View(result);
+        //}
         //public async Task<IActionResult> Create([Bind("Name,Age,Gender,Size,Breed")] Pet pet)
         //{
         //    if (ModelState.IsValid)
@@ -42,10 +42,24 @@ namespace BarkBuddies.Controllers
         //    }
         //    return View(pet);
 
-        public async Task<IActionResult> IndexTuple()
+        [Authorize]
+        public async Task<IActionResult> Index()
         {  
             var currentUser = await GetCurrentUserAsync();
             var result = await GetProfileAsync(currentUser.Id);
+            if (result == null)
+            {
+                result = new UserProfile() { 
+                    ZipCode = null,  
+                    HasCats = false,
+                    HasChildren = false,
+                    SizeChoice =SizeChoice.same,
+                    AgeChoice = AgeChoice.same,
+                    User = currentUser
+                };
+            _context.Add(result);
+                await _context.SaveChangesAsync();
+            }
             var petList = await _context.Pets.Where(x => x.Owner.Equals(currentUser)).ToListAsync();
             var model = new Tuple<UserProfile, List<Pet>>(result, petList);
             return View(model);

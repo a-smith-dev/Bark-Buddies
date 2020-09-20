@@ -31,7 +31,7 @@ namespace BarkBuddies.Controllers
             var currentUser = await GetCurrentUserAsync();
             if(currentUser != null)
             {
-                return RedirectToAction("IndexTuple", "UserProfile");
+                return RedirectToAction("Index", "UserProfile");
             }
             return View();
             
