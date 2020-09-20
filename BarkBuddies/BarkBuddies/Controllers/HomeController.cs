@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using BarkBuddies.Models;
 using BarkBuddies.Services;
 using Microsoft.AspNetCore.Identity;
-using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace BarkBuddies.Controllers
 {
@@ -37,19 +33,6 @@ namespace BarkBuddies.Controllers
             
         }
 
-
-        //public IActionResult Details()
-        //{
-        //    var details = _service.Get().Result;
-        //    var model = details.Animals[0];
-        //    return View(model);
-        //}
-        //public IActionResult DetailsList()
-        //{
-        //    var details = _service.Get().Result;
-        //    var model = details.Animals.ToList();
-        //    return View(model);
-        //}
         private async Task<IdentityUser> GetCurrentUserAsync() => await _userManager.GetUserAsync(User);
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

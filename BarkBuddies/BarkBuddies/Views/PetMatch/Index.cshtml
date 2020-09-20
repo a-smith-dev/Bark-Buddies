@@ -73,8 +73,15 @@
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
-                <a asp-action="Details" asp-route-id="@item.PetId">Details</a> |
-                <a asp-action="Adopt" asp-route-id="@item.PetId">Adopt</a> |
+                <a href="@item.Url" target="_blank">View Profile</a> |
+                @if (item.Status == "Adoptable")
+                {
+                    <a asp-action="Adopt" asp-route-id="@item.PetId">Adopt</a>
+                }
+                else
+                {
+                    @: Adopt
+                } |
                 <a asp-action="Delete" asp-route-id="@item.PetId">Delete</a>
             </td>
         </tr>

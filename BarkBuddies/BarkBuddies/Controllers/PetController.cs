@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using BarkBuddies.Data;
 using BarkBuddies.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,8 @@ namespace BarkBuddies.Controllers
             _context = context;
             _userManager = userManager;
         }
+
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             if (User.Identity.IsAuthenticated)
@@ -30,6 +33,8 @@ namespace BarkBuddies.Controllers
                 return RedirectToAction("Index", "UserProfile");
             }
         }
+
+        [Authorize]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -47,6 +52,7 @@ namespace BarkBuddies.Controllers
             return View(pet);
         }
 
+        [Authorize]
         public IActionResult Create()
         {         
             {
@@ -69,6 +75,8 @@ namespace BarkBuddies.Controllers
                 }
                 return View(pet);           
         }
+
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -84,6 +92,7 @@ namespace BarkBuddies.Controllers
             return View(pet);
         }
  
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("PetId,Name,Age,Gender,Size,Breed")] Pet pet)
@@ -115,6 +124,8 @@ namespace BarkBuddies.Controllers
             }
             return View(pet);
         }
+
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
