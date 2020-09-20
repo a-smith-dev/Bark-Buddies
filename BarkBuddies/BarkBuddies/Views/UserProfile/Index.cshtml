@@ -3,11 +3,12 @@
 
 
 @{
-    ViewData["Title"] = "IndexTuple";
+    ViewData["Title"] = "User Profile Info";
 }
 
 <div class="row">
     <div class="col-md-4">
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Item1.Id" />
             <div class="form-group">
@@ -49,8 +50,12 @@
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
+                @if (TempData.Peek("SuccessMessage") != null)
+                {
+		            @TempData["SuccessMessage"]
+	            }
             </div>
-       
+        </form>
     </div>
         <table class="table">
             @foreach (var item in Model.Item2)

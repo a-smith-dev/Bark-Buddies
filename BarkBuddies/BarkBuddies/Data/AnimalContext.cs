@@ -1,5 +1,4 @@
 ﻿using BarkBuddies.Data.Entities;
-using BarkBuddies.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

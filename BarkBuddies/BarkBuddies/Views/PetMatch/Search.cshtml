@@ -4,9 +4,9 @@
     ViewData["Title"] = "Details";
 }
 
-@if (ViewBag.Success != null)
+@if (TempData.Peek("Success") != null)
 {
-    <p>@ViewBag.Success</p>
+    <p>@TempData["Success"]</p>
 }
 <h1>View</h1>
 

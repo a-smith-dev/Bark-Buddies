@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BarkBuddies.Data;
 using BarkBuddies.Data.Entities;
 using BarkBuddies.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +26,7 @@ namespace BarkBuddies.Controllers
             _userManager = userManager;
         }
 
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var currentUser = GetCurrentUserAsync().Result;
@@ -49,6 +50,7 @@ namespace BarkBuddies.Controllers
             return View(petMatchList);
         }
 
+        [Authorize]
         public IActionResult Search()
         {
             var currentUser = GetCurrentUserAsync().Result;
@@ -58,7 +60,8 @@ namespace BarkBuddies.Controllers
             var model = details.Animals.ToList();
             return View(model);
         }
-       
+        
+        [Authorize]
         public async Task<IActionResult> SavePet(string id)
         {
             var currentUser = GetCurrentUserAsync().Result;
@@ -81,11 +84,12 @@ namespace BarkBuddies.Controllers
                     Url = pet.Url,
                     User = currentUser});
                 await _context.SaveChangesAsync();
-                ViewBag.Success = $"{pet.Name} was successfully saved to list!";
+                TempData["Success"] = $"{pet.Name} was successfully saved to list!";
             }
             return RedirectToAction("Search");
         }
 
+        [Authorize]
         public async Task<IActionResult> Adopt(string id)
         {
             var currentUser = GetCurrentUserAsync().Result;
@@ -110,7 +114,7 @@ namespace BarkBuddies.Controllers
                         Owner = currentUser
                     });
                     await _context.SaveChangesAsync();
-                    ViewData["Adopted"] = $"Congratulations! You've adopted {pet.Name}!";
+                    TempData["Adopted"] = $"Congratulations! You've adopted {pet.Name}!";
 
                     var petMatchList = _context.PetMatch.Where(x => x.PetId == pet.PetId).ToListAsync().Result;
                     if (petMatchList.Count() != 0)
@@ -137,8 +141,10 @@ namespace BarkBuddies.Controllers
             }
         }
 
+        [Authorize]
         public async Task<IActionResult> Delete(string id)
         {
+            var currentUser = GetCurrentUserAsync().Result;
             int tempId;
             int? petId = int.TryParse(id, out tempId) ? tempId : (int?)null;
 
@@ -148,27 +154,16 @@ namespace BarkBuddies.Controllers
             }
 
             var pet = await _context.PetMatch
-                .FirstOrDefaultAsync(m => m.PetId == petId);
+                .Where(x => x.PetId == petId && x.User == currentUser).FirstOrDefaultAsync();
 
             if (pet == null)
             {
                 return NotFound();
             }
-
-            return View(pet);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ConfirmDelete(string id)
-        {
-            var currentUser = GetCurrentUserAsync().Result;
-            var petId = 0;
-            int.TryParse(id, out petId);
-            var pet = await _context.PetMatch
-                .Where(x=> x.PetId == petId && x.User == currentUser).FirstOrDefaultAsync();
             _context.PetMatch.Remove(pet);
             await _context.SaveChangesAsync();
+            TempData["Removed"] = $"{pet.Name} has been removed.";
+
             return RedirectToAction("Index");
         }
 
