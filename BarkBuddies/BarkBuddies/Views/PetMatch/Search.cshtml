@@ -12,15 +12,13 @@
 {
     <p>@TempData["Success"]</p>
 }
-<h1>Your Pet Matches</h1>
+<h1>My Pet Matches</h1>
 
 <div>
-    <hr />
     <table class="table">
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Photos)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Name)
@@ -36,14 +34,13 @@
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Breeds)
-                </th> 
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Contact)
+                </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Url)
                 </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.OrganizationId)
-                </th>
-
                 <th></th>
             </tr>
         </thead>
@@ -60,14 +57,14 @@
                 }
                 else
                 {
-                <td>
-                    @{
-                        var img = pet.Photos[0].Small;
-                    }
-                    <img src=@img width=@img.100 />
-                </td>
+                    <td>
+                        @{
+                            var img = pet.Photos[0].Small;
+                        }
+                        <img src=@img width=@img .100 />
+                    </td>
                 }
-               
+
 
 
                 <td>
@@ -86,14 +83,14 @@
                     @Html.DisplayFor(modelItem => pet.Breeds.Primary)
                 </td>
                 <td>
-                    <a href="@Html.DisplayFor(modelItem => pet.Url)" target="_blank">View Petfinder Profile</a>
+                    @Html.DisplayFor(modelItem => pet.Contact.Address.City), @Html.DisplayFor(modelItem => pet.Contact.Address.State)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => pet.OrganizationId)
+                    <a href="@Html.DisplayFor(modelItem => pet.Url)" target="_blank">View Petfinder Page</a>
                 </td>
+
                 <td>
-                    <a asp-controller="PetMatch" asp-action="SavePet" asp-route-id="@pet.PetId"><button class="btn btn-primary">Save pet to wish list</button></a>
-                   
+                    <a asp-controller="PetMatch" asp-action="SavePet" asp-route-id="@pet.PetId" class="btn btn-primary">Save to Wish List</a>
                 </td>
             </tr>
             }

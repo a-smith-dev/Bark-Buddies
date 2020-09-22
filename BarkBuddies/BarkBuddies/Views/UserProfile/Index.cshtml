@@ -10,7 +10,7 @@
     }
 </style>
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4" style="padding-right: 10%">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Item1.Id" />
@@ -61,23 +61,39 @@
             </div>
         </form>
     </div>
-        <table class="table">
-            @foreach (var item in Model.Item2)
-            {
-                <tr>
-                    <td>
-                        @item.Name
-                    </td>
-                    <td>
-                        <a asp-controller="Pet" asp-action="Details" asp-route-id="@item.PetId">Details</a> 
-                    </td>
-                </tr>
-            }
-
-        </table>
-</div>
-<div>
-    <a asp-controller="PetMatch" asp-action="Search"><button class="btn-primary"> View Matching Pets</button></a>
-
+    <div class="col-md-4">
+        @if (Model.Item2.Count >= 1)
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            My Pets
+                        </th>
+                    </tr>
+                </thead>
+                @foreach (var item in Model.Item2)
+                {
+                    <tr>
+                        <td>
+                            @item.Name
+                        </td>
+                        <td>
+                            <a asp-controller="Pet" asp-action="Details" asp-route-id="@item.PetId">Details</a>
+                        </td>
+                    </tr>
+                }
+            </table>
+            <div>
+                <a asp-controller="PetMatch" asp-action="Search" class="btn btn-primary"> View Matching Pets</a>
+            </div>
+        }
+        else
+        {
+            <div>
+                <a asp-controller="Pet" asp-action="Create" class="btn btn-primary">Add your first Pet</a>
+            </div>
+        }
+    </div>
 </div>
 
