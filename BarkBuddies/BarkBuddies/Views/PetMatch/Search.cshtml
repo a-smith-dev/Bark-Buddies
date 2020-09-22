@@ -3,15 +3,18 @@
 @{
     ViewData["Title"] = "Details";
 }
-
+<style>
+    body {
+        background-color: thistle;
+    }
+</style>
 @if (TempData.Peek("Success") != null)
 {
     <p>@TempData["Success"]</p>
 }
-<h1>View</h1>
+<h1>Your Pet Matches</h1>
 
 <div>
-    <h4>PetMatch</h4>
     <hr />
     <table class="table">
         <thead>

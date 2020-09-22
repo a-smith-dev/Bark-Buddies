@@ -43,7 +43,7 @@ namespace BarkBuddies
             services.AddHttpClient<IAnimalsService, ApiAnimalsService>(o =>
             {
                 o.BaseAddress = new Uri(Configuration["Api:BaseAddress"]);
-                o.DefaultRequestHeaders.Add("user-agent" , "test");
+                o.DefaultRequestHeaders.Add("user-agent" , "app user");
             });
 
             services.Configure<PetFinderApiCredentials>(Configuration.GetSection("PetFinderApiCredentials"));

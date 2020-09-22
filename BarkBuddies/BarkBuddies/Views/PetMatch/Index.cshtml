@@ -3,9 +3,13 @@
 @{
     ViewData["Title"] = "Index";
 }
+<style>
+    body {
+        background-color: thistle;
+    }
+</style>
 
-
-<h1>Index</h1>
+<h1>Wish List</h1>
 
 <p>
     @if (TempData.Peek("Adopted") != null)
