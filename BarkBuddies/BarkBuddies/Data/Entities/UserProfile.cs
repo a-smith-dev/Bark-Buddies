@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace BarkBuddies.Data.Entities
@@ -6,6 +7,7 @@ namespace BarkBuddies.Data.Entities
     public class UserProfile
     {
         public int Id { get; set; }
+        [DisplayName("Zip Code")]
         public int? ZipCode { get; set; }
         public bool HasChildren { get; set; }
         public bool HasCats { get; set; }

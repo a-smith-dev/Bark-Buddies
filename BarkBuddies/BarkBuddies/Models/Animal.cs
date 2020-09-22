@@ -1,4 +1,6 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 
 public class Animal
@@ -8,6 +10,8 @@ public class Animal
 
     [JsonPropertyName("organization_id")]
     public string OrganizationId { get; set; }
+
+    [DisplayName("Profile")]
     public string Url { get; set; }
     public string Type { get; set; }
     public string Species { get; set; }
@@ -19,6 +23,9 @@ public class Animal
     public string Status { get; set; }
     public string Name { get; set; }
     public Photos[] Photos { get; set; }
+
+    [DisplayName("Location")]
+    public Contact Contact { get; set; }
 }
 
 public class Breeds
