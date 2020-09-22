@@ -1,13 +1,17 @@
 ﻿@model IEnumerable<BarkBuddies.Data.Entities.Pet>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "My Pets";
 }
-
-<h1>Index</h1>
+<style>
+    body {
+        background-color: thistle;
+    }
+</style>
+<h1>My Pets</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Add Your Pets</a>
 </p>
 <table class="table">
     <thead>
@@ -57,7 +61,7 @@
                 </td>
             </tr>
         }
-        
+
     </tbody>
 </table>
 <div>
