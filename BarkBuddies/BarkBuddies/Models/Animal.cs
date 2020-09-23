@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 
@@ -42,22 +41,4 @@ public class Photos
     public string Medium { get; set; }
     public string Large { get; set; }
     public string Full { get; set; }
-
 }
-//[NotMapped]
-//    public object Coat { get; set; }
-//    //public Attributes Attributes { get; set; }
-//    //public Environment Environment { get; set; }
-//    [NotMapped]
-//    //public string[] Tags { get; set; }
-//    //public string Description { get; set; }
-//    //public Photo[] Photos { get; set; }
-//    //public Video[] Videos { get; set; }
-
-
-//    //[JsonPropertyName("published_at")]
-//    //public DateTime PublishedAt { get; set; }
-//    //public Contact Contact { get; set; }
-//    ////public _Links1 Links { get; set; }
-//}
-

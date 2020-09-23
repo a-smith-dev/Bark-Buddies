@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace BarkBuddies.Models
 
@@ -30,14 +27,6 @@ public class Next
 {
     public string Href { get; set; }
 }
-
-//public class Breeds
-//{
-//    public string Primary { get; set; }
-//    public object Secondary { get; set; }
-//    public bool Mixed { get; set; }
-//    public bool Unknown { get; set; }
-//}
 
 public class Colors
 {
@@ -121,4 +110,3 @@ public class Video
 {
     public string Embed { get; set; }
 }
-

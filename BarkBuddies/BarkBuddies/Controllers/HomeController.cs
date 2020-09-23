@@ -11,14 +11,11 @@ namespace BarkBuddies.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        private readonly IAnimalsService _service;
         private readonly UserManager<IdentityUser> _userManager;
 
         public HomeController(ILogger<HomeController> logger, IAnimalsService service, UserManager<IdentityUser> userManager)
         {
             _logger = logger;
-            _service = service;
             _userManager = userManager;
         }
 

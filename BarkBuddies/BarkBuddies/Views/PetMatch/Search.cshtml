@@ -9,89 +9,97 @@
 {
     <p>@TempData["Success"]</p>
 }
-<div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Age)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Gender)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Size)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Breeds)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Contact)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Url)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var pet in Model)
-            {
+
+@if (Model.Any())
+{
+    <div>
+        <table class="table">
+            <thead>
                 <tr>
-                    @if (pet.Photos.Count() < 1)
-                    {
-                        <td>
-                            <p>No photo</p>
-                        </td>
-
-                    }
-                    else
-                    {
-                        <td>
-                            @{
-                                var img = pet.Photos[0].Small;
-                            }
-                            <img src=@img width=@img .100 />
-                        </td>
-                    }
-
-
-
-                    <td>
-                        @Html.DisplayFor(modelItem => pet.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => pet.Age)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => pet.Gender)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => pet.Size)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => pet.Breeds.Primary)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => pet.Contact.Address.City), @Html.DisplayFor(modelItem => pet.Contact.Address.State)
-                    </td>
-                    <td>
-                        <a href="@Html.DisplayFor(modelItem => pet.Url)" target="_blank">View Petfinder Page</a>
-                    </td>
-
-                    <td>
-                        <a asp-controller="PetMatch" asp-action="SavePet" asp-route-id="@pet.PetId" class="btn btn-primary">Save to Wish List</a>
-                    </td>
+                    <th>
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Age)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Gender)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Size)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Breeds)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Contact)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Url)
+                    </th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+                @foreach (var pet in Model)
+                {
+                    <tr>
+                        @if (pet.Photos.Count() < 1)
+                        {
+                            <td>
+                                <p>No photo</p>
+                            </td>
+
+                        }
+                        else
+                        {
+                            <td>
+                                @{
+                                    var img = pet.Photos[0].Small;
+                                }
+                                <img src=@img width=@img .100 />
+                            </td>
+                        }
+
+
+
+                        <td>
+                            @Html.DisplayFor(modelItem => pet.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => pet.Age)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => pet.Gender)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => pet.Size)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => pet.Breeds.Primary)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => pet.Contact.Address.City), @Html.DisplayFor(modelItem => pet.Contact.Address.State)
+                        </td>
+                        <td>
+                            <a href="@Html.DisplayFor(modelItem => pet.Url)" target="_blank">View Petfinder Page</a>
+                        </td>
+
+                        <td>
+                            <a asp-controller="PetMatch" asp-action="SavePet" asp-route-id="@pet.PetId" class="btn btn-primary">Save to Wish List</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <p>Sorry! No pets match your search. Please double check your preferences and search again.</p>
+}
 <div>
     <a asp-controller="Pet" asp-action="Index">My Pets</a> |
     <a asp-controller="UserProfile" asp-action="Index">Home</a>

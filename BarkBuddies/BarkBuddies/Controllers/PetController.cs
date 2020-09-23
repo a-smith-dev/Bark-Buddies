@@ -159,13 +159,6 @@ namespace BarkBuddies.Controllers
             return _context.Pets.Any(p => p.PetId == id);
         }
 
-        private async Task<UserProfile> GetProfileAsync(string userId)
-        {
-            return await _context.UserProfiles.FirstOrDefaultAsync(x => x.User.Id == userId);
-        }
-
         private async Task<IdentityUser> GetCurrentUserAsync() => await _userManager.GetUserAsync(User);
-
-        private bool ProfileExists(IdentityUser user) => _context.UserProfiles.Any(p => p.User.Id == user.Id);
     }        
 }
