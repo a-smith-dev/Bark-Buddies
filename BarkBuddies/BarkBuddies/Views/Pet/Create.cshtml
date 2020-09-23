@@ -2,16 +2,9 @@
 @model BarkBuddies.Data.Entities.Pet
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Add A Pet";
 }
-<style>
-    body {
-        background-color: thistle;
-    }
-</style>
 <h1>Add A Pet</h1>
-
-
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -59,7 +52,8 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">My Pets</a> |
+    <a asp-controller="UserProfile" asp-action="Index">Home</a>
 </div>
 
 @section Scripts {

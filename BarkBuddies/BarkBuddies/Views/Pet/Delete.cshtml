@@ -3,15 +3,9 @@
 @{
     ViewData["Title"] = "Delete";
 }
-<style>
-    body {
-        background-color: thistle;
-    }
-</style>
-<h1>Delete from My Pets</h1>
+<h1>Confirm Delete?</h1>
 
 <div>
-
     <dl class="row">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
@@ -47,8 +41,10 @@
 
     <form asp-action="Delete">
         <input type="hidden" asp-for="PetId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">My Pets</a>
-        <a asp-controller="UserProfile" asp-action="Index">Home</a>
+        <input type="submit" value="Delete" class="btn btn-primary" />
     </form>
+    <div>
+        <a asp-action="Index">My Pets</a> |
+        <a asp-controller="UserProfile" asp-action="Index">Home</a>
+    </div>
 </div>

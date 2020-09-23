@@ -1,14 +1,8 @@
 ﻿@model IEnumerable<BarkBuddies.Data.Entities.PetMatch>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "My Pet Wish List";
 }
-<style>
-    body {
-        background-color: thistle;
-    }
-</style>
-
 <h1>Wish List</h1>
 
 @if (Model.Any() == true)
@@ -92,5 +86,9 @@
 }
 else
 {
-    <a asp-controller="PetMatch" asp-action="Search" class="btn btn-primary">Search for pets</a>
+    <a asp-controller="PetMatch" asp-action="Search" class="btn btn-primary">Search for pets to add</a>
 }
+<div>
+    <a asp-action="Index">My Pets</a> |
+    <a asp-controller="UserProfile" asp-action="Index">Home</a>
+</div>

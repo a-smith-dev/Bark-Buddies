@@ -4,11 +4,6 @@
 @{
     ViewData["Title"] = "Edit";
 }
-<style>
-    body {
-        background-color: thistle;
-    }
-</style>
 <h1>Edit Details</h1>
 <hr />
 <div class="row">
@@ -58,7 +53,8 @@
 </div>
 
 <div>
-    <a asp-action="Index">Return to My Pets</a>
+    <a asp-action="Index">My Pets</a> |
+    <a asp-controller="UserProfile" asp-action="Index">Home</a>
 </div>
 
 @section Scripts {

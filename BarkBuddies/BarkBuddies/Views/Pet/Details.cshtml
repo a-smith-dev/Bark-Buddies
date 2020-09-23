@@ -3,22 +3,11 @@
 @{
     ViewData["Title"] = "Details";
 }
-<style>
-    body {
-        background-color: thistle;
-    }
-</style>
-<h1>Details</h1>
+<h1>Details about @Model.Name</h1>
 
 <div>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Age)
         </dt>
@@ -46,9 +35,7 @@
     </dl>
 </div>
 <div>
-
     <a asp-action="Edit" asp-route-id="@Model.PetId">Edit</a> |
     <a asp-action="Index">My Pets</a> |
     <a asp-controller="UserProfile" asp-action="Index">Home</a>
-
 </div>
