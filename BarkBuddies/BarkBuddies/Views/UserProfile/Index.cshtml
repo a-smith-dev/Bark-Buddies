@@ -31,24 +31,22 @@
             </div>
             <div>
                 <br />
-                Search for the ideal match for your dog! Select size and age compared to the dog saved in your profile:
+                Search for the ideal match for your dog! Select size and age compared to the dogs saved in your profile:
             </div>
             <br/>
             <div class="form-group">
-                <label asp-for="Item1.SizeChoice" class="control-label">Size</label>
+                <label asp-for="Item1.SizeChoice" class="control-label">Choose a Size</label>
                 <select asp-for="Item1.SizeChoice "
                         class="form-control"
                         asp-items="Html.GetEnumSelectList<SizeChoice>()">
-                    <option value="">Choose a size</option>
                 </select>
                 <span asp-validation-for="Item1.SizeChoice" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Item1.AgeChoice" class="control-label">Age</label>
+                <label asp-for="Item1.AgeChoice" class="control-label">Choose an Age</label>
                 <select asp-for="Item1.AgeChoice"
                         class="form-control"
                         asp-items="Html.GetEnumSelectList<AgeChoice>()">
-                    <option value="">Choose an age</option>
                 </select>
                 <span asp-validation-for="Item1.AgeChoice" class="text-danger"></span>
             </div>
